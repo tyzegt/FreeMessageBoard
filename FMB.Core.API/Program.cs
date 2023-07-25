@@ -14,6 +14,8 @@ public class Program
         var services = builder.Services;
         AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
+        services.AddDbContext<PostsContext>();
+        services.AddDbContext<CommentsContext>();
         services.AddScoped<IPostsService, PostsService>();
         services.AddScoped<ICommentsService, CommentsService>();
         // Add services to the container.
