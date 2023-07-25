@@ -17,8 +17,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FMB.Services.Tags", "Servic
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FMB.Services.Users", "ServiceLayer\FMB.Services.Users\FMB.Services.Users.csproj", "{662D1FA0-F521-48CC-822A-2B873C4AAAF1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FMB.Services.TagsTests", "ServiceLayer\FMB.Services.TagsTests\FMB.Services.TagsTests.csproj", "{88F7294E-49E8-45CF-B173-343569EF6736}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,10 +47,6 @@ Global
 		{662D1FA0-F521-48CC-822A-2B873C4AAAF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{662D1FA0-F521-48CC-822A-2B873C4AAAF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{662D1FA0-F521-48CC-822A-2B873C4AAAF1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{88F7294E-49E8-45CF-B173-343569EF6736}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{88F7294E-49E8-45CF-B173-343569EF6736}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{88F7294E-49E8-45CF-B173-343569EF6736}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{88F7294E-49E8-45CF-B173-343569EF6736}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
