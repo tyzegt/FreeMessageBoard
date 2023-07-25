@@ -1,45 +1,48 @@
 using FMB.Services.Comments;
 using FMB.Services.Posts;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using FMB.Services.Tags;
 
 namespace FMB.Core.API
 {
-    public static void Main(string[] args)
+    public class Program
     {
-        var builder = WebApplication.CreateBuilder(args);
-        IConfiguration configuration = builder.Configuration;
-        var services = builder.Services;
-        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
-
-        services.AddScoped<IPostsService, PostsService>();
-        services.AddScoped<ICommentsService, CommentsService>();
-        // Add services to the container.
-
-        builder.Services.AddControllers();
-        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-        builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
-
-        //Dependences
-        builder.Services.AddScoped<ITagService, TagService>();
-
-        var app = builder.Build();
-
-
-        // Configure the HTTP request pipeline.
-        if (app.Environment.IsDevelopment())
+        public static void Main(string[] args)
         {
-            app.UseSwagger();
-            app.UseSwaggerUI();
+            var builder = WebApplication.CreateBuilder(args);
+            IConfiguration configuration = builder.Configuration;
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
+
+            // Add services to the container.
+
+            builder.Services.AddControllers();
+            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen();
+
+            //Dependences
+            var services = builder.Services;
+            services.AddScoped<ITagService, TagService>();
+            services.AddScoped<IPostsService, PostsService>();
+            services.AddScoped<ICommentsService, CommentsService>();
+            services.AddScoped<PostsContext>();
+
+            var app = builder.Build();
+
+
+            // Configure the HTTP request pipeline.
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI();
+            }
+
+            app.UseAuthorization();
+
+
+            app.MapControllers();
+
+            app.Run();
         }
-
-        app.UseAuthorization();
-
-
-        app.MapControllers();
-
-        app.Run();
-    }
+    }    
 }
