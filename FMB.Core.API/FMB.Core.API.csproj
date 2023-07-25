@@ -8,10 +8,14 @@
 
   <ItemGroup>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+    <PackageReference Include="UmbracoCms.Core" Version="8.18.8" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
+    <ProjectReference Include="..\ServiceLayer\FMB.Services.Comments\FMB.Services.Comments.csproj" />
+    <ProjectReference Include="..\ServiceLayer\FMB.Services.Posts\FMB.Services.Posts.csproj" />
+    <ProjectReference Include="..\ServiceLayer\FMB.Services.Tags\FMB.Services.Tags.csproj" />
+    <ProjectReference Include="..\ServiceLayer\FMB.Services.Users\FMB.Services.Users.csproj" />
   </ItemGroup>
 
 </Project>

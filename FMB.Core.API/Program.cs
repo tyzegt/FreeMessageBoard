@@ -1,3 +1,5 @@
+using FMB.Services.Tags;
+
 namespace FMB.Core.API
 {
     public class Program
@@ -12,6 +14,9 @@ namespace FMB.Core.API
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            //Dependences
+            builder.Services.AddScoped<ITagService, TagService>();
 
             var app = builder.Build();
 
