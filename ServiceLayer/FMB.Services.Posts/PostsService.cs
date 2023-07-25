@@ -13,11 +13,20 @@ namespace FMB.Services.Posts
         {
 
         }
-        public async Task CreatePostAsync(Post post)
+        public async Task CreatePostAsync(string title, string body) // TODO валидация строк
         {
+            if(string.IsNullOrEmpty(title)) { throw new ArgumentNullException("title"); }
+            if(string.IsNullOrEmpty(body)) { throw new ArgumentNullException("body"); }
+
             using (var _context = new PostsContext())
             {
-                await _context.Posts.AddAsync(post);
+                await _context.Posts.AddAsync(new Post()
+                {
+                    Title = title,
+                    Body = body,
+                    CreatedAt = DateTime.Now,
+                    Author = "TBD" // TODO current user id
+                });
                 await _context.SaveChangesAsync();
             }
         }
@@ -49,7 +58,7 @@ namespace FMB.Services.Posts
             {
                 var targetPost = await _context.Posts.FirstOrDefaultAsync(p => p.Id == postId);
 
-                return targetPost ?? new Post { Label = "Post doesn't exist" };
+                return targetPost ?? new Post { Title = "Post doesn't exist" };
             }
         }
  
@@ -62,7 +71,7 @@ namespace FMB.Services.Posts
                 if (targetPost != null)
                 {
                     targetPost.Body = newPostBody;
-                    targetPost.Label = string.IsNullOrEmpty(newPostTitle) ? targetPost.Label : newPostTitle;
+                    targetPost.Title = string.IsNullOrEmpty(newPostTitle) ? targetPost.Title : newPostTitle;
                     _context.Posts.Update(targetPost);
                     await _context.SaveChangesAsync();
                 }

@@ -22,7 +22,7 @@ namespace FMB.Services.Comments
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             // TODO: вынести в конфиги
-            optionsBuilder.UseNpgsql("Server=127.0.0.1;Port=5432;Database=TagsDB;User Id=postgres;Password=qwerty;");
+            optionsBuilder.UseNpgsql("Server=127.0.0.1;Port=5432;Database=CommentsDB;User Id=postgres;Password=qwerty;");
         }
     }
 }

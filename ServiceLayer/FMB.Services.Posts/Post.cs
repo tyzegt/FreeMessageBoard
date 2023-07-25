@@ -10,7 +10,7 @@ namespace FMB.Services.Posts
         public long Id { get; set; } 
         public DateTime CreatedAt { get; set; }
         public string? Author { get; set; }
-        public string? Label { get; set; }
+        public string? Title { get; set; }
         public string? Body { get; set; }
     }
     public class PostMark

@@ -20,7 +20,7 @@ namespace FMB.Services.Posts
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             // TODO: вынести в конфиги
-            optionsBuilder.UseNpgsql("Server=127.0.0.1;Port=5432;Database=TagsDB;User Id=postgres;Password=qwerty;");
+            optionsBuilder.UseNpgsql("Server=127.0.0.1;Port=5432;Database=PostsDB;User Id=postgres;Password=qwerty;");
         }
     }
     
