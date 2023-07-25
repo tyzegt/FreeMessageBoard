@@ -12,6 +12,7 @@ namespace FMB.Services.Comments
         public long UserId { get; set; } 
         public long ParentCommentId { get; set; }
         public string? Body { get; set; }
+        public long PostId { get; set; }
     }
     public class CommentMark
     {
