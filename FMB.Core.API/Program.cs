@@ -2,10 +2,9 @@ using FMB.Services.Comments;
 using FMB.Services.Posts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using FMB.Services.Tags;
 
-namespace FMB.Core.API;
-
-public class Program
+namespace FMB.Core.API
 {
     public static void Main(string[] args)
     {
@@ -23,7 +22,11 @@ public class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
+        //Dependences
+        builder.Services.AddScoped<ITagService, TagService>();
+
         var app = builder.Build();
+
 
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
