@@ -14,10 +14,8 @@ public class Program
         var services = builder.Services;
         AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
-        services.AddDbContext<PostsContext>(options =>
-            options.UseNpgsql(configuration.GetConnectionString("PostsContext")));
-        services.AddDbContext<CommentsContext>(options =>
-            options.UseNpgsql(configuration.GetConnectionString("CommentsContext")));
+        services.AddScoped<IPostsService, PostsService>();
+        services.AddScoped<ICommentsService, CommentsService>();
         // Add services to the container.
 
         builder.Services.AddControllers();

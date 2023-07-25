@@ -7,15 +7,16 @@ namespace FMB.Services.Comments
 {
     public class Comment
     {
-        public Guid Id { get; set; } = Guid.NewGuid();
+        public long Id { get; set; } 
         public DateTime CreatedAt { get; set; }
-        public string? Author { get; set; } 
+        public long UserId { get; set; } 
+        public long ParentCommentId { get; set; }
         public string? Body { get; set; }
     }
     public class CommentMark
     {
-        public Guid UserId { get; set; }
-        public Guid CommentId { get; set; }
+        public long UserId { get; set; }
+        public long CommentId { get; set; }
         public string? Mark { get; set; }
     }
 }

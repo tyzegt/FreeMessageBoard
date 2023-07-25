@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 
 #nullable disable
@@ -11,11 +12,19 @@ namespace FMB.Services.Comments
 {
     public class CommentsContext : DbContext
     {
-        public CommentsContext(DbContextOptions<CommentsContext> options)
+        IConfiguration _configuration;
+        public CommentsContext(DbContextOptions<CommentsContext> options, IConfiguration configuration)
             : base(options)
         {
+            _configuration = configuration;
             Database.EnsureCreated();
         }  
         public DbSet<Comment> Comments { get; set; } 
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        { 
+            // TODO: вынести в конфиги
+            optionsBuilder.UseNpgsql(_configuration.GetConnectionString("CommentsContext")); 
+        }
     }
 }

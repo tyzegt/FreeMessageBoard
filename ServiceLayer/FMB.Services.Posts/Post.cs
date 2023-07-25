@@ -7,7 +7,7 @@ namespace FMB.Services.Posts
 {
     public class Post
     {
-        public Guid Id { get; set; } = Guid.NewGuid();
+        public long Id { get; set; } 
         public DateTime CreatedAt { get; set; }
         public string? Author { get; set; }
         public string? Label { get; set; }
@@ -15,8 +15,8 @@ namespace FMB.Services.Posts
     }
     public class PostMark
     {
-        public Guid UserId { get; set; }
-        public Guid PostId { get; set; }
+        public long UserId { get; set; }
+        public long PostId { get; set; }
         public string? Mark { get; set; }
     }
 }
