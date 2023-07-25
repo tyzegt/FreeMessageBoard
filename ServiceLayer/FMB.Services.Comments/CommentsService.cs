@@ -8,45 +8,34 @@ namespace FMB.Services.Comments
 {
     public class CommentsService : ICommentsService
     {
-        public CommentsService() // TODO DI
+        private readonly CommentsContext _context;
+        public CommentsService(CommentsContext context)
         {
-
+            _context = context;
         }
         public async Task CreateCommentAsync(Comment comment)
-        {
-            using (var _context = new CommentsContext())
-            {
-                await _context.Comments.AddAsync(comment);
-                await _context.SaveChangesAsync();
-            }
+    {
+            await _context.Comments.AddAsync(comment);
+            await _context.SaveChangesAsync();
         }
 
         public async Task DeleteCommentAsync(long commentId)
         {
-            using (var _context = new CommentsContext())
-            {
-                var targetComment = await _context.Comments.FirstOrDefaultAsync(c => c.Id == commentId);
-                if (targetComment != null) _context.Remove(targetComment);
-                await _context.SaveChangesAsync();
-            }
+            var targetComment = await _context.Comments.FirstOrDefaultAsync(c => c.Id == commentId);
+            if (targetComment != null) _context.Remove(targetComment);
+            await _context.SaveChangesAsync();
         }
 
         public async Task<Comment> GetCommentAsync(long commentId)
         {
-            using (var _context = new CommentsContext())
-            {
-                var targetComment = await _context.Comments.FirstOrDefaultAsync(c => c.Id == commentId);
+            var targetComment = await _context.Comments.FirstOrDefaultAsync(c => c.Id == commentId);
 
-                return targetComment ?? new Comment();
-            }
+            return targetComment ?? new Comment();
         }
 
         public async Task<IEnumerable<Comment>> GetCommentsByParentCommentIdAsync(long parentCommentId)
         {
-            using (var _context = new CommentsContext())
-            {
-                return await _context.Comments.Where(c => c.ParentCommentId == parentCommentId).ToListAsync();
-            }
+            return await _context.Comments.Where(c => c.ParentCommentId == parentCommentId).ToListAsync();
         }
 
         public Task<IEnumerable<Comment>> GetCommentsByPostIdAsync(long postId)
@@ -56,15 +45,12 @@ namespace FMB.Services.Comments
 
         public async Task UpdateCommentAsync(long commentId, string newCommentBody)
         {
-            using (var _context = new CommentsContext())
+            var targetComment = await _context.Comments.FirstOrDefaultAsync(c => c.Id == commentId);
+            if (targetComment != null)
             {
-                var targetComment = await _context.Comments.FirstOrDefaultAsync(c => c.Id == commentId);
-                if (targetComment != null)
-                {
-                    targetComment.Body = newCommentBody;
-                    _context.Comments.Update(targetComment);
-                    await _context.SaveChangesAsync();
-                }
+                targetComment.Body = newCommentBody;
+                _context.Comments.Update(targetComment);
+                await _context.SaveChangesAsync();
             }
         }
     }

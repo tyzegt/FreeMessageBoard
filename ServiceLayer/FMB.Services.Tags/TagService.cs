@@ -11,64 +11,58 @@ namespace FMB.Services.Tags
 {
     public class TagService : ITagService
     {
+        private readonly TagsContext _tagsContext;
+
+        public TagService(TagsContext tagsContext)
+        {
+            _tagsContext = tagsContext;
+        }
+
         public void CreateTag(string name)
         {
             if(string.IsNullOrEmpty(name)) throw new ArgumentNullException("name");
 
-            using (var db = new ApplicationDbContext()) // TODO: DI
-            {
-                if (db.Tags.Any(x => x.Name == name)) throw new ArgumentException($"tag '{name}' already exists");
-                db.Tags.Add(new Tag { Name = name });
-                db.SaveChanges();
-            }
+            if (_tagsContext.Tags.Any(x => x.Name == name)) throw new ArgumentException($"tag '{name}' already exists");
+            _tagsContext.Tags.Add(new Tag { Name = name });
+            _tagsContext.SaveChanges();
         }
 
         public Tag GetTag(int id)
         {
-            using (var db = new ApplicationDbContext()) // TODO: DI
-            {
-                var tag = db.Tags.FirstOrDefault(x => x.Id == id);
-                if (tag != null) return tag;
-                throw new KeyNotFoundException($"tag with id '{id}' not found");
-            }
+            var tag = _tagsContext.Tags.FirstOrDefault(x => x.Id == id);
+            if (tag != null) return tag;
+            throw new KeyNotFoundException($"tag with id '{id}' not found");
         }
 
         public void UpdateTag(int id, string name)
         {
             if (string.IsNullOrEmpty(name)) throw new ArgumentNullException("name");
 
-            using (var db = new ApplicationDbContext()) // TODO: DI
+            var tag = _tagsContext.Tags.FirstOrDefault(x => x.Id == id);
+            if (tag != null)
             {
-                var tag = db.Tags.FirstOrDefault(x => x.Id == id);
-                if (tag != null)
-                {
-                    tag.Name = name;
-                    db.SaveChanges();
-                }
-                else
-                {
-                    throw new KeyNotFoundException($"tag with id '{id}' not found");
-                }
+                tag.Name = name;
+                _tagsContext.SaveChanges();
+            }
+            else
+            {
+                throw new KeyNotFoundException($"tag with id '{id}' not found");
             }
 
         }
 
         public void DeleteTag(int id) // consider DTO
         {
-            using (var db = new ApplicationDbContext()) // TODO: DI
+            var tag = _tagsContext.Tags.FirstOrDefault(x => x.Id == id);
+            if (tag != null)
             {
-                var tag = db.Tags.FirstOrDefault(x => x.Id == id);
-                if (tag != null)
-                {
-                    db.Remove(tag);
-                    db.SaveChanges();
-                }
-                else
-                {
-                    throw new KeyNotFoundException($"tag with id '{id}' not found");
-                }
+                _tagsContext.Remove(tag);
+                _tagsContext.SaveChanges();
             }
-
+            else
+            {
+                throw new KeyNotFoundException($"tag with id '{id}' not found");
+            }
         }
     }
 }

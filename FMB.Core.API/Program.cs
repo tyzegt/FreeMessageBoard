@@ -1,4 +1,5 @@
 using FMB.Services.Comments;
+using FMB.Services.Comments.Models;
 using FMB.Services.Posts;
 using FMB.Services.Tags;
 
@@ -25,7 +26,11 @@ namespace FMB.Core.API
             services.AddScoped<ITagService, TagService>();
             services.AddScoped<IPostsService, PostsService>();
             services.AddScoped<ICommentsService, CommentsService>();
+
             services.AddScoped<PostsContext>();
+            services.AddScoped<TagsContext>();
+            services.AddScoped<PostsContext>();
+            services.AddScoped<CommentsContext>();
 
             var app = builder.Build();
 

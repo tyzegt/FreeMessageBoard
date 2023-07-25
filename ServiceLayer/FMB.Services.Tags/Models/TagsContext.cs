@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace FMB.Services.Comments.Models
 {
-    internal class ApplicationDbContext : DbContext
+    public class TagsContext : DbContext
     {
         public DbSet<Tag> Tags { get; set; }
 
-        public ApplicationDbContext()
+        public TagsContext()
         {
             Database.EnsureCreated();
         }
