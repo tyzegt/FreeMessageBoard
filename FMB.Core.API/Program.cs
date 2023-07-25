@@ -4,7 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using FMB.Services.Tags;
 
-namespace FMB.Core.API
+namespace FMB.Core.API;
+public class Program
 {
     public static void Main(string[] args)
     {
