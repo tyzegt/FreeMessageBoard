@@ -31,12 +31,16 @@ namespace FMB.Services.Posts
 
         public async Task<IEnumerable<Post>> GetAllPostsAsync()
         {
-            return await _context.Posts.ToListAsync();
+            return await _context.Posts
+                .Include(p => p.PostMarks)
+                .ToListAsync();
         }
 
         public async Task<Post> GetPostAsync(long postId)
         {
-            var targetPost = await _context.Posts.FirstOrDefaultAsync(p => p.Id == postId);
+            var targetPost = await _context.Posts
+                .Include(p => p.PostMarks)
+                .FirstOrDefaultAsync(p => p.Id == postId);
 
             return targetPost?? new Post{ Label = "Post doesn't exist"};
         }
