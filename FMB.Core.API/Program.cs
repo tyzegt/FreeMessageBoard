@@ -1,7 +1,16 @@
+using FMB.Core.API.Data;
+using FMB.Core.API.Services.Identity;
 using FMB.Services.Comments;
 using FMB.Services.Comments.Models;
 using FMB.Services.Posts;
 using FMB.Services.Tags;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace FMB.Core.API
 {
@@ -32,8 +41,40 @@ namespace FMB.Core.API
             services.AddScoped<PostsContext>();
             services.AddScoped<CommentsContext>();
 
-            var app = builder.Build();
+            builder.Services.AddDbContext<IdentityContext>(options =>
+                options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+            builder.Services.AddScoped<ITokenService, TokenService>();
+            builder.Services
+                .AddAuthentication(options =>
+                {
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters {
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = builder.Configuration["Jwt:issuer"]!,
+                        ValidAudience = builder.Configuration["Jwt:audience"]!,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:secret"]!))
+                    };
+                });
+
+            builder.Services
+                .AddAuthorization(options => options.DefaultPolicy = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme)
+                .RequireAuthenticatedUser()
+                .Build());
+            builder.Services.AddIdentity<AppUser, IdentityRole<long>>()
+                .AddEntityFrameworkStores<IdentityContext>()
+                .AddUserManager<UserManager<AppUser>>()
+                .AddSignInManager<SignInManager<AppUser>>();
+
+
+            var app = builder.Build();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -42,8 +83,8 @@ namespace FMB.Core.API
                 app.UseSwaggerUI();
             }
 
+            app.UseAuthentication();
             app.UseAuthorization();
-
 
             app.MapControllers();
 

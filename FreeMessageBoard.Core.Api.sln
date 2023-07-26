@@ -5,8 +5,6 @@ VisualStudioVersion = 17.5.33414.496
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FMB.Core.API", "FMB.Core.API\FMB.Core.API.csproj", "{4DAD63FA-47C5-4008-AE86-47F10FB1C322}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FMB.IdentityServer", "FMB.IdentityServer\FMB.IdentityServer.csproj", "{5FC50BC2-BEBD-496D-A751-22FF5F0F226F}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ServiceLayer", "ServiceLayer", "{36334812-AEA7-4164-B33A-248B4FEE8BB9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FMB.Services.Comments", "ServiceLayer\FMB.Services.Comments\FMB.Services.Comments.csproj", "{05C13EB2-96C0-46FE-975A-9C54FE189C7B}"
@@ -27,10 +25,6 @@ Global
 		{4DAD63FA-47C5-4008-AE86-47F10FB1C322}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4DAD63FA-47C5-4008-AE86-47F10FB1C322}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4DAD63FA-47C5-4008-AE86-47F10FB1C322}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5FC50BC2-BEBD-496D-A751-22FF5F0F226F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5FC50BC2-BEBD-496D-A751-22FF5F0F226F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5FC50BC2-BEBD-496D-A751-22FF5F0F226F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5FC50BC2-BEBD-496D-A751-22FF5F0F226F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{05C13EB2-96C0-46FE-975A-9C54FE189C7B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{05C13EB2-96C0-46FE-975A-9C54FE189C7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{05C13EB2-96C0-46FE-975A-9C54FE189C7B}.Release|Any CPU.ActiveCfg = Release|Any CPU
