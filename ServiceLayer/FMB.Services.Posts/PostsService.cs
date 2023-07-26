@@ -53,5 +53,16 @@ namespace FMB.Services.Posts
                 await _context.SaveChangesAsync();
             }
         }
+
+        public async Task AddPostmarkAsync(long postId, PostMark mark)
+        {
+            var targetPost = _context.Posts.FirstOrDefault(p => p.Id == postId);
+            if(targetPost != null)
+            {
+                targetPost.PostMarks.Add(mark);
+                _context.Posts.Update(targetPost);
+                await _context.SaveChangesAsync();
+            }
+        }
     }
 }
