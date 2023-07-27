@@ -18,13 +18,13 @@ namespace FMB.Core.API.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreateTag([FromBody] CreateTagRequest request)
+        public ActionResult<long> CreateTag([FromBody] CreateTagRequest request)
         {
             if(request == null) return new BadRequestObjectResult("empty request body");
 
             try
             {
-                _tagService.CreateTag(request.Name);
+                return _tagService.CreateTag(request.Name);
             }
             catch (Exception ex)
             {
@@ -34,7 +34,7 @@ namespace FMB.Core.API.Controllers
         }
 
         [HttpGet]
-        public ActionResult<Tag> GetTag(int id)
+        public ActionResult<Tag> GetTag(long id)
         {
             try
             {
@@ -63,7 +63,7 @@ namespace FMB.Core.API.Controllers
         }
 
         [HttpDelete]
-        public ActionResult DeleteTag([FromBody] int id)
+        public ActionResult DeleteTag([FromBody] long id)
         {
             try
             {

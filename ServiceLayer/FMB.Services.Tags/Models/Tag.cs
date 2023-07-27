@@ -10,7 +10,7 @@ namespace FMB.Services.Tags.Models
     public class Tag
     {
         [Key]
-        public int Id { get; set; }
+        public long Id { get; set; }
         public string Name { get; set; }
     }
 }

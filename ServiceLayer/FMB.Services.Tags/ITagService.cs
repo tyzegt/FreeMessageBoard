@@ -9,9 +9,9 @@ namespace FMB.Services.Tags
 {
     public interface ITagService
     {
-        void CreateTag(string name);
-        void DeleteTag(int id);
-        Tag GetTag(int id);
-        void UpdateTag(int id, string name);
+        long CreateTag(string name);
+        void DeleteTag(long id);
+        Tag GetTag(long id);
+        void UpdateTag(long id, string name);
     }
 }

@@ -18,23 +18,25 @@ namespace FMB.Services.Tags
             _tagsContext = tagsContext;
         }
 
-        public void CreateTag(string name)
+        public long CreateTag(string name)
         {
             if(string.IsNullOrEmpty(name)) throw new ArgumentNullException("name");
 
             if (_tagsContext.Tags.Any(x => x.Name == name)) throw new ArgumentException($"tag '{name}' already exists");
-            _tagsContext.Tags.Add(new Tag { Name = name });
+            var tag = new Tag { Name = name };
+            _tagsContext.Tags.Add(tag);
             _tagsContext.SaveChanges();
+            return tag.Id;
         }
 
-        public Tag GetTag(int id)
+        public Tag GetTag(long id)
         {
             var tag = _tagsContext.Tags.FirstOrDefault(x => x.Id == id);
             if (tag != null) return tag;
             throw new KeyNotFoundException($"tag with id '{id}' not found");
         }
 
-        public void UpdateTag(int id, string name)
+        public void UpdateTag(long id, string name)
         {
             if (string.IsNullOrEmpty(name)) throw new ArgumentNullException("name");
 
@@ -51,7 +53,7 @@ namespace FMB.Services.Tags
 
         }
 
-        public void DeleteTag(int id) // consider DTO
+        public void DeleteTag(long id) // consider DTO
         {
             var tag = _tagsContext.Tags.FirstOrDefault(x => x.Id == id);
             if (tag != null)
