@@ -1,6 +1,5 @@
 Идея данного проекта - создать ресурс, разрабатываемый сообществом для сообщества, с совместной регуляцией контента. Без политики.
 
-Main idea of this progect is to create a community, that developing a messageboard for itself by itself, with joint regulation of content.
-No polytics.
+The main idea of this project is to develop a message board made community for the community, with joint content moderation. No politics.
 
 # [ссылка на тг](https://t.me/freeMessageBoard)
