@@ -8,15 +8,17 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using FMB.Services.Comments;
 using FMB.Core.API.Models;
+using FMB.Core.API.Data;
+using Microsoft.AspNetCore.Identity;
 
 namespace FMB.Core.API.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    public class CommentsController : ControllerBase
+    public class CommentsController : BaseFMBController
     {
         private readonly ICommentsService _commentsService;   
-        public CommentsController(ICommentsService commentsService)
+        public CommentsController(ICommentsService commentsService, IConfiguration config, UserManager<AppUser> userManager) : base(userManager, config)
         { 
             _commentsService = commentsService;
         }

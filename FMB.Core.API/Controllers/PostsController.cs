@@ -8,15 +8,17 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using FMB.Services.Posts;
 using FMB.Core.API.Models;
+using FMB.Core.API.Data;
+using Microsoft.AspNetCore.Identity;
 
 namespace FMB.Core.API.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    public class PostsController : ControllerBase
+    public class PostsController : BaseFMBController
     {
         private readonly IPostsService _postsService;   
-        public PostsController(IPostsService postsService)
+        public PostsController(IPostsService postsService, IConfiguration config, UserManager<AppUser> userManager) : base(userManager, config)
         { 
             _postsService = postsService;
         }

@@ -1,8 +1,10 @@
-﻿using FMB.Core.API.Models;
+﻿using FMB.Core.API.Data;
+using FMB.Core.API.Models;
 using FMB.Services.Tags;
 using FMB.Services.Tags.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FMB.Core.API.Controllers
@@ -10,11 +12,11 @@ namespace FMB.Core.API.Controllers
     [Route("api/[controller]/[action]")]
     [ApiController]
     [Authorize]
-    public class TagsController : ControllerBase
+    public class TagsController : BaseFMBController
     {
         private readonly ITagService _tagService;
 
-        public TagsController(ITagService tagService)
+        public TagsController(ITagService tagService, IConfiguration config, UserManager<AppUser> userManager) : base(userManager, config)
         {
             _tagService = tagService;
         }

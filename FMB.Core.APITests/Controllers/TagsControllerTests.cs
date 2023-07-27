@@ -7,19 +7,25 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net;
 using FMB.Services.Tags;
+using Moq;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
+using FMB.Core.API.Data;
+using FMB.Core.APITests;
 
 namespace FMB.Core.API.Controllers.Tests
 {
     [TestClass()]
     public class TagsControllerTests
     {
+
         [TestMethod()]
         public void TagsFullTest()
         {
             var context = new TagsContext(); // TODO consider standalone or fake context for api tests
-            var controller = new TagsController(new TagService(context));
-            var newTagName = Guid.NewGuid().ToString("N");
+            var controller = new TagsController(new TagService(context), Mock.Of<IConfiguration>(), FakeUserManager.GetInstance());
 
+            var newTagName = Guid.NewGuid().ToString("N");
             var createTagResult = controller.CreateTag(new Models.CreateTagRequest { Name = newTagName }).Value;
             Assert.IsTrue(createTagResult > 0);
 

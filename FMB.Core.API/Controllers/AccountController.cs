@@ -14,21 +14,18 @@ namespace FMB.Core.API.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    public class AccountController : ControllerBase
+    public class AccountController : BaseFMBController
     {
-        private readonly UserManager<AppUser> _userManager;
         private readonly IdentityContext _context;
         private readonly ITokenService _tokenService;
-        private readonly IConfiguration _configuration;
 
         public AccountController(
             UserManager<AppUser> userManager, 
             IdentityContext context, 
             ITokenService tokenService, 
-            IConfiguration configuration)
+            IConfiguration configuration) 
+            : base(userManager, configuration)
         {
-            _configuration = configuration;
-            _userManager = userManager;
             _context = context;
             _tokenService = tokenService;
         }
