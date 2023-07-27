@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+#nullable disable
+
 namespace FMB.Services.Comments
 {
     public class Comment
@@ -11,12 +13,14 @@ namespace FMB.Services.Comments
         public DateTime CreatedAt { get; set; }
         public long UserId { get; set; } 
         public long ParentCommentId { get; set; }
-        public string? Body { get; set; }
+        public string Body { get; set; }
+        public long PostId { get; set; }
+        public virtual ICollection<CommentMark> CommentMarks { get; set; }
     }
     public class CommentMark
     {
         public long UserId { get; set; }
         public long CommentId { get; set; }
-        public string? Mark { get; set; }
+        public string Mark { get; set; }
     }
 }

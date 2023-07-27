@@ -1,26 +1,25 @@
 ﻿using FMB.Services.Tags.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 
-namespace FMB.Services.Comments.Models
+#nullable disable
+
+namespace FMB.Services.Tags
 {
     public class TagsContext : DbContext
     {
-        public DbSet<Tag> Tags { get; set; }
-
-        public TagsContext()
+        IConfiguration _configuration;
+        public TagsContext(DbContextOptions<TagsContext> options, IConfiguration configuration)
+            : base(options)
         {
+            _configuration = configuration;
             Database.EnsureCreated();
-        }
+        }  
+        public DbSet<Tag> Tags { get; set; } 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            // TODO: вынести в конфиги
-            optionsBuilder.UseNpgsql("Server=127.0.0.1;Port=5432;Database=TagsDB;User Id=postgres;Password=qwerty;"); 
+        {  
+            optionsBuilder.UseNpgsql(_configuration.GetConnectionString("TagsContext")); 
         }
     }
 }

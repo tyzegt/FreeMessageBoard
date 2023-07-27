@@ -1,7 +1,6 @@
 using FMB.Core.API.Data;
 using FMB.Core.API.Services.Identity;
-using FMB.Services.Comments;
-using FMB.Services.Comments.Models;
+using FMB.Services.Comments; 
 using FMB.Services.Posts;
 using FMB.Services.Tags;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -12,8 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
-namespace FMB.Core.API
-{
+namespace FMB.Core.API; 
     public class Program
     {
         public static void Main(string[] args)
@@ -36,10 +34,9 @@ namespace FMB.Core.API
             services.AddScoped<IPostsService, PostsService>();
             services.AddScoped<ICommentsService, CommentsService>();
 
-            services.AddScoped<PostsContext>();
-            services.AddScoped<TagsContext>();
-            services.AddScoped<PostsContext>();
-            services.AddScoped<CommentsContext>();
+            services.AddDbContext<PostsContext>();
+            services.AddDbContext<TagsContext>(); 
+            services.AddDbContext<CommentsContext>();
 
             builder.Services.AddDbContext<IdentityContext>(options =>
                 options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -90,5 +87,4 @@ namespace FMB.Core.API
 
             app.Run();
         }
-    }    
-}
+    }     

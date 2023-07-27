@@ -12,17 +12,18 @@ namespace FMB.Services.Comments
 {
     public class CommentsContext : DbContext
     {
-        public DbSet<Comment> Comments { get; set; }
-
-        public CommentsContext()
+        IConfiguration _configuration;
+        public CommentsContext(DbContextOptions<CommentsContext> options, IConfiguration configuration)
+            : base(options)
         {
+            _configuration = configuration;
             Database.EnsureCreated();
-        }
+        }  
+        public DbSet<Comment> Comments { get; set; } 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            // TODO: вынести в конфиги
-            optionsBuilder.UseNpgsql("Server=127.0.0.1;Port=5432;Database=CommentsDB;User Id=postgres;Password=qwerty;");
+        {  
+            optionsBuilder.UseNpgsql(_configuration.GetConnectionString("CommentsContext")); 
         }
     }
 }

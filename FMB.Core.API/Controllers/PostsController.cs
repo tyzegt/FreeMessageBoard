@@ -36,7 +36,26 @@ namespace FMB.Core.API.Controllers
             }
             return Ok();
         }
-
-         
+        [HttpGet]
+        public async Task<IActionResult> GetAllPostsAsync()
+        {
+            var posts = await _postsService.GetAllPostsAsync();
+            return Ok(posts);
+        }
+        [HttpGet] 
+        public async Task<Post> GetPostByIdAsync([FromBody] GetPostRequest request)
+        {
+            return await _postsService.GetPostAsync(request.Id);
+        }
+        [HttpDelete]
+        public async Task DeletePostAsync(long postId)
+        {
+            await _postsService.DeletePostAsync(postId);
+        }
+        [HttpPost]
+        public async Task UpdatePostAsync([FromBody] UpdatePostRequest request)
+        {
+            await _postsService.UpdatePostAsync(request.Id, request.NewBody, request.NewTitle);
+        }
     }
 }
