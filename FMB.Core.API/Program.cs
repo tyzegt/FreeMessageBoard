@@ -34,10 +34,9 @@ namespace FMB.Core.API;
             services.AddScoped<IPostsService, PostsService>();
             services.AddScoped<ICommentsService, CommentsService>();
 
-            services.AddScoped<PostsContext>();
-            services.AddScoped<TagsContext>();
-            services.AddScoped<PostsContext>();
-            services.AddScoped<CommentsContext>();
+            services.AddDbContext<PostsContext>();
+            services.AddDbContext<TagsContext>(); 
+            services.AddDbContext<CommentsContext>();
 
             builder.Services.AddDbContext<IdentityContext>(options =>
                 options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
