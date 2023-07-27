@@ -7,7 +7,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net;
 using FMB.Services.Tags;
-using FMB.Services.Comments.Models;
 
 namespace FMB.Core.API.Controllers.Tests
 {

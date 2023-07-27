@@ -7,17 +7,15 @@ namespace FMB.Services.Posts
 {
     public class PostsContext : DbContext
     {
-        IConfiguration _configuration;
-        public PostsContext(DbContextOptions<PostsContext> options, IConfiguration configuration)
-            : base(options)
+        public PostsContext() // Не добавлять DI пока не покроем тестами
         {
-            _configuration = configuration;
             Database.EnsureCreated();
         }  
         public DbSet<Post> Posts { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {  
-            optionsBuilder.UseNpgsql(_configuration.GetConnectionString("PostsContext")); 
+        {
+            // Не убирать, пока не покроем всё тестами
+            optionsBuilder.UseNpgsql("Server=127.0.0.1;Port=5432;Database=PostsDB;User Id=postgres;Password=qwerty;");
         } 
     }
     
