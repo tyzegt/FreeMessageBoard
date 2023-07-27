@@ -31,18 +31,11 @@ namespace FMB.Services.Posts
         public async Task DeletePostAsync(long postId)
         {
             var targetPost = await _context.Posts.FirstOrDefaultAsync(p => p.Id == postId);
-            if (targetPost != null)
-            {
-                _context.Remove(targetPost);
-                await _context.SaveChangesAsync();
-            }
-        }
+            if (targetPost == null) throw new Exception($"post {postId} not found");
 
-        public async Task<IEnumerable<Post>> GetAllPostsAsync()
-        {
-            return await _context.Posts
-                .Include(p => p.PostMarks)
-                .ToListAsync();
+            _context.Remove(targetPost);
+            await _context.SaveChangesAsync();
+            
         }
 
         public async Task<Post> GetPostAsync(long postId)
@@ -51,7 +44,7 @@ namespace FMB.Services.Posts
                 .Include(p => p.PostMarks)
                 .FirstOrDefaultAsync(p => p.Id == postId);
 
-            return targetPost?? new Post{ Label = "Post doesn't exist"};
+            return targetPost?? throw new Exception("Post doesn't exist");
         }
  
 
@@ -61,24 +54,22 @@ namespace FMB.Services.Posts
             if(string.IsNullOrEmpty(newPostTitle)) { throw new ArgumentNullException("newPostTitle"); }
 
             var targetPost = await _context.Posts.FirstOrDefaultAsync(p => p.Id == postId);
-            if (targetPost != null)
-            {
-                targetPost.Body = newPostBody;
-                targetPost.Title = string.IsNullOrEmpty(newPostTitle) ? targetPost.Title : newPostTitle;
-                _context.Posts.Update(targetPost);
-                await _context.SaveChangesAsync();
-            }
+            if (targetPost == null) throw new Exception($"post {postId} not found");
+            
+            targetPost.Body = newPostBody;
+            targetPost.Title = string.IsNullOrEmpty(newPostTitle) ? targetPost.Title : newPostTitle;
+            _context.Posts.Update(targetPost);
+            await _context.SaveChangesAsync();
         }
 
         public async Task AddPostmarkAsync(long postId, PostMark mark)
         {
             var targetPost = _context.Posts.FirstOrDefault(p => p.Id == postId);
-            if(targetPost != null)
-            {
-                targetPost.PostMarks.Add(mark);
-                _context.Posts.Update(targetPost);
-                await _context.SaveChangesAsync();
-            }
+            if (targetPost == null) throw new Exception($"post {postId} not found");
+            
+            targetPost.PostMarks.Add(mark);
+            _context.Posts.Update(targetPost);
+            await _context.SaveChangesAsync();
         }
     }
 }

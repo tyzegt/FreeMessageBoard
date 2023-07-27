@@ -25,6 +25,7 @@ namespace FMB.Core.API.Controllers
         public async Task<IActionResult> CreateComment([FromBody] CreateCommentRequest request)
         {
             if(request == null) return new BadRequestObjectResult("empty request body");
+            // TODO check body for invalid symbols or commands
 
             try
             {
@@ -62,6 +63,7 @@ namespace FMB.Core.API.Controllers
         {
             // TODO check comment author
             // TODO check if update allowed
+            // TODO check body
             await _commentsService.UpdateCommentAsync(request.Id, request.NewBody);
         }
     }

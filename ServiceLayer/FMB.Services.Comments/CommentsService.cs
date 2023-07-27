@@ -38,7 +38,7 @@ namespace FMB.Services.Comments
             var targetComment =  await _context.Comments
                 .FirstOrDefaultAsync(c => c.Id == commentId);
             
-            return targetComment?? new Comment();
+            return targetComment?? throw new Exception($"comment {commentId} not found");
         }
 
         public async Task<IEnumerable<Comment>> GetCommentsByParentCommentIdAsync(long parentCommentId)
@@ -60,12 +60,11 @@ namespace FMB.Services.Comments
             if(string.IsNullOrEmpty(newCommentBody)) throw new ArgumentNullException("newCommentBody");
             
             var targetComment = await _context.Comments.FirstOrDefaultAsync(c => c.Id == commentId);
-            if (targetComment != null)
-            {
-                targetComment.Body = newCommentBody;
-                _context.Comments.Update(targetComment);
-                await _context.SaveChangesAsync();
-            }
+            if (targetComment == null) throw new Exception($"comment {commentId} not found");
+            
+            targetComment.Body = newCommentBody;
+            _context.Comments.Update(targetComment);
+            await _context.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<Comment>> GetAllCommentsByPostIdAsync(long postId)
@@ -76,12 +75,10 @@ namespace FMB.Services.Comments
         public async Task AddCommentMarkAsync(long commentId, CommentMark mark)
         {
             var targetComment = _context.Comments.FirstOrDefault(c => c.Id == commentId);
-            if(targetComment != null )
-            {
-                targetComment.CommentMarks.Add(mark);
-                _context.Update(targetComment);
-                await _context.SaveChangesAsync();
-            }
+            if (targetComment == null) throw new Exception($"comment {commentId} not found");
+
+            _context.Update(targetComment);
+            await _context.SaveChangesAsync();
         }
     }
 }
