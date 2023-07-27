@@ -13,9 +13,16 @@ namespace FMB.Services.Comments
         {
             _context = context;
         }
-        public async Task CreateCommentAsync(Comment comment)
+        public async Task CreateCommentAsync(long postId, long parentCommentId, string body)
     {
-            await _context.Comments.AddAsync(comment);
+            await _context.Comments.AddAsync(new Comment
+            {
+                PostId = postId,
+                ParentCommentId = parentCommentId,
+                Body = body,
+                CreatedAt = DateTime.UtcNow,
+                UserId = 123 // TODO current user
+            });
             await _context.SaveChangesAsync();
         }
 
@@ -29,7 +36,6 @@ namespace FMB.Services.Comments
         public async Task<Comment> GetCommentAsync(long commentId)
         {
             var targetComment =  await _context.Comments
-                .Include(c => c.CommentMarks)
                 .FirstOrDefaultAsync(c => c.Id == commentId);
             
             return targetComment?? new Comment();
@@ -39,7 +45,6 @@ namespace FMB.Services.Comments
         {
             return await _context.Comments
                 .Where(c => c.ParentCommentId == parentCommentId)
-                .Include(c => c.CommentMarks)
                 .ToListAsync(); 
         }
 
@@ -47,9 +52,7 @@ namespace FMB.Services.Comments
         {
             return await _context.Comments
                 .Where(c =>c.PostId == postId)
-                .Include(c => c.CommentMarks)
                 .ToListAsync();
-
         }
 
         public async Task UpdateCommentAsync(long commentId, string newCommentBody)

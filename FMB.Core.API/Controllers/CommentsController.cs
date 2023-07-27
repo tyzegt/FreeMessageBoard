@@ -28,7 +28,7 @@ namespace FMB.Core.API.Controllers
 
             try
             {
-                await _commentsService.CreateCommentAsync(request.Comment);
+                await _commentsService.CreateCommentAsync(request.PostId, request.ParentCommentId, request.Body);
             }
             catch (Exception ex)
             {
@@ -36,25 +36,32 @@ namespace FMB.Core.API.Controllers
             }
             return Ok();
         }
+
         [HttpGet]
         public async Task<IActionResult> GetAllCommentsByPostIdAsync(long postId)
         {
             var comments = await _commentsService.GetAllCommentsByPostIdAsync(postId);
             return Ok(comments);
         }
+
         [HttpGet] 
         public async Task<Comment> GetCommentByIdAsync([FromBody] GetCommentRequest request)
         {
             return await _commentsService.GetCommentAsync(request.Id);
         }
+
         [HttpDelete]
         public async Task DeleteCommentAsync(long commentId)
         {
+            // TODO only for moderator/admin
             await _commentsService.DeleteCommentAsync(commentId);
         }
+
         [HttpPost]
         public async Task UpdateCommentAsync([FromBody] UpdateCommentRequest request)
         {
+            // TODO check comment author
+            // TODO check if update allowed
             await _commentsService.UpdateCommentAsync(request.Id, request.NewBody);
         }
     }

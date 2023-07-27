@@ -10,6 +10,8 @@ namespace FMB.Core.API.Models
 {
     public class CreateCommentRequest
     {
-        public Comment Comment { get; set; }
+        public long ParentCommentId { get; set; }
+        public string Body { get; set; }
+        public long PostId { get; set; }
     }
 }

@@ -7,7 +7,7 @@ namespace FMB.Services.Comments
 {
     public interface ICommentsService
     {
-        Task CreateCommentAsync(Comment comment);
+        Task CreateCommentAsync(long postId, long parentCommentId, string body);
         Task DeleteCommentAsync(long commentId);
         Task<Comment> GetCommentAsync(long commentId);
         Task UpdateCommentAsync(long commentId, string newCommentBody);

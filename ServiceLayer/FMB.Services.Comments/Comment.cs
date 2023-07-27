@@ -15,7 +15,6 @@ namespace FMB.Services.Comments
         public long ParentCommentId { get; set; }
         public string Body { get; set; }
         public long PostId { get; set; }
-        public virtual ICollection<CommentMark> CommentMarks { get; set; }
     }
     public class CommentMark
     {
