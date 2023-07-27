@@ -40,22 +40,51 @@ namespace FMB.Core.API.Controllers
         public async Task<IActionResult> GetAllPostsAsync()
         {
             var posts = await _postsService.GetAllPostsAsync();
-            return Ok(posts);
+            if(posts.Count() > 0) return Ok(posts);
+
+            return new BadRequestObjectResult("No posts added yet");
         }
         [HttpGet] 
-        public async Task<Post> GetPostByIdAsync([FromBody] GetPostRequest request)
+        public async Task<ActionResult<Post>> GetPostByIdAsync([FromBody] GetPostRequest request)
         {
-            return await _postsService.GetPostAsync(request.Id);
+            try
+            {
+                return await _postsService.GetPostAsync(request.Id);
+            }
+            catch (Exception ex)
+            {
+                return new BadRequestObjectResult("Post doesn't exist");
+            }
         }
         [HttpDelete]
-        public async Task DeletePostAsync(long postId)
+        public async Task<IActionResult> DeletePostAsync(long postId)
         {
-            await _postsService.DeletePostAsync(postId);
+            try
+            {
+                await _postsService.DeletePostAsync(postId);
+            }
+            catch (Exception ex)
+            {
+                return new BadRequestObjectResult(ex.Message);
+            }
+            return Ok();
+            
         }
         [HttpPost]
-        public async Task UpdatePostAsync([FromBody] UpdatePostRequest request)
+        public async Task<IActionResult> UpdatePostAsync([FromBody] UpdatePostRequest request)
         {
-            await _postsService.UpdatePostAsync(request.Id, request.NewBody, request.NewTitle);
+            if (request == null) return new BadRequestObjectResult("empty request body");
+
+            try
+            {
+                await _postsService.UpdatePostAsync(request.Id, request.NewBody, request.NewTitle);
+            }
+            catch (Exception ex)
+            {
+                return new BadRequestObjectResult(ex.Message);
+            }
+            return Ok();
+            
         }
     }
 }

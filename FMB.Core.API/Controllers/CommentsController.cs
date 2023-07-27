@@ -40,22 +40,52 @@ namespace FMB.Core.API.Controllers
         public async Task<IActionResult> GetAllCommentsByPostIdAsync(long postId)
         {
             var comments = await _commentsService.GetAllCommentsByPostIdAsync(postId);
-            return Ok(comments);
+            if(comments.Count() > 0) return Ok(comments);
+            
+            return new BadRequestObjectResult("No comments added yet");
         }
         [HttpGet] 
-        public async Task<Comment> GetCommentByIdAsync([FromBody] GetCommentRequest request)
+        public async Task<ActionResult<Comment>> GetCommentByIdAsync([FromBody] GetCommentRequest request)
         {
-            return await _commentsService.GetCommentAsync(request.Id);
+            try
+            {
+                return await _commentsService.GetCommentAsync(request.Id);
+            }
+            catch 
+            {
+                return new BadRequestObjectResult("Comment doesn't exist");
+            }
+            
         }
         [HttpDelete]
-        public async Task DeleteCommentAsync(long commentId)
+        public async Task<IActionResult> DeleteCommentAsync(long commentId)
         {
-            await _commentsService.DeleteCommentAsync(commentId);
+            try
+            {
+                await _commentsService.DeleteCommentAsync(commentId);
+            }
+            catch (Exception ex)
+            {
+                return new BadRequestObjectResult(ex.Message);
+            }
+            return Ok();
+            
         }
         [HttpPost]
-        public async Task UpdateCommentAsync([FromBody] UpdateCommentRequest request)
+        public async Task<IActionResult> UpdateCommentAsync([FromBody] UpdateCommentRequest request)
         {
-            await _commentsService.UpdateCommentAsync(request.Id, request.NewBody);
+             if (request == null) return new BadRequestObjectResult("empty request body");
+
+            try
+            {
+                await _commentsService.UpdateCommentAsync(request.Id, request.NewBody);
+            }
+            catch (Exception ex)
+            {
+                return new BadRequestObjectResult(ex.Message);
+            }
+            return Ok();
+            
         }
     }
 }
