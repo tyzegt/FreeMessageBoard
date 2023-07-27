@@ -55,13 +55,16 @@ namespace FMB.Services.Posts
         }
  
 
-        public async Task UpdatePostAsync(long postId, string newPostBody, string? newPostLabel)
+        public async Task UpdatePostAsync(long postId, string newPostBody, string? newPostTitle)
         {
+            if(string.IsNullOrEmpty(newPostBody)) { throw new ArgumentNullException("newPostBody"); }
+            if(string.IsNullOrEmpty(newPostTitle)) { throw new ArgumentNullException("newPostTitle"); }
+
             var targetPost = await _context.Posts.FirstOrDefaultAsync(p => p.Id == postId);
             if (targetPost != null)
             {
                 targetPost.Body = newPostBody;
-                targetPost.Label = string.IsNullOrEmpty(newPostLabel) ? targetPost.Label : newPostLabel;
+                targetPost.Title = string.IsNullOrEmpty(newPostTitle) ? targetPost.Title : newPostTitle;
                 _context.Posts.Update(targetPost);
                 await _context.SaveChangesAsync();
             }

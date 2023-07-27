@@ -54,6 +54,8 @@ namespace FMB.Services.Comments
 
         public async Task UpdateCommentAsync(long commentId, string newCommentBody)
         {
+            if(string.IsNullOrEmpty(newCommentBody)) throw new ArgumentNullException("newCommentBody");
+            
             var targetComment = await _context.Comments.FirstOrDefaultAsync(c => c.Id == commentId);
             if (targetComment != null)
             {

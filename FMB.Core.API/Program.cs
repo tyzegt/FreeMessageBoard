@@ -1,7 +1,6 @@
 using FMB.Core.API.Data;
 using FMB.Core.API.Services.Identity;
-using FMB.Services.Comments;
-using FMB.Services.Comments.Models;
+using FMB.Services.Comments; 
 using FMB.Services.Posts;
 using FMB.Services.Tags;
 using Microsoft.AspNetCore.Authentication.JwtBearer;

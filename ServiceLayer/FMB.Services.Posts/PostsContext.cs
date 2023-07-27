@@ -11,17 +11,18 @@ namespace FMB.Services.Posts
 {
     public class PostsContext : DbContext
     {
-        public DbSet<Post> Posts { get; set; }
-        public PostsContext()
+        IConfiguration _configuration;
+        public PostsContext(DbContextOptions<PostsContext> options, IConfiguration configuration)
+            : base(options)
         {
+            _configuration = configuration;
             Database.EnsureCreated();
-        }
-
+        }  
+        public DbSet<Post> Posts { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            // TODO: вынести в конфиги
-            optionsBuilder.UseNpgsql("Server=127.0.0.1;Port=5432;Database=PostsDB;User Id=postgres;Password=qwerty;");
-        }
+        {  
+            optionsBuilder.UseNpgsql(_configuration.GetConnectionString("PostsContext")); 
+        } 
     }
     
 }
