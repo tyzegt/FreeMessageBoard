@@ -14,7 +14,8 @@ namespace FMB.Services.Posts
         public string Author { get; set; }
         public string Label { get; set; }
         public string Body { get; set; }
-        public virtual ICollection<PostMark> PostMarks { get; set; }
+        public virtual ICollection<PostMark> PostMarks { get; set; } 
+        public string? Title { get; set; } 
     }
     public class PostMark
     {

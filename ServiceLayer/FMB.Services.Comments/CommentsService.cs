@@ -8,13 +8,13 @@ namespace FMB.Services.Comments
 {
     public class CommentsService : ICommentsService
     {
-        CommentsContext _context;
+        private readonly CommentsContext _context;
         public CommentsService(CommentsContext context)
         {
             _context = context;
         }
         public async Task CreateCommentAsync(Comment comment)
-        {
+    {
             await _context.Comments.AddAsync(comment);
             await _context.SaveChangesAsync();
         }
@@ -22,7 +22,7 @@ namespace FMB.Services.Comments
         public async Task DeleteCommentAsync(long commentId)
         {
             var targetComment = await _context.Comments.FirstOrDefaultAsync(c => c.Id == commentId);
-            if(targetComment != null) _context.Remove(targetComment);
+            if (targetComment != null) _context.Remove(targetComment);
             await _context.SaveChangesAsync();
         }
 
@@ -55,7 +55,7 @@ namespace FMB.Services.Comments
         public async Task UpdateCommentAsync(long commentId, string newCommentBody)
         {
             var targetComment = await _context.Comments.FirstOrDefaultAsync(c => c.Id == commentId);
-            if(targetComment != null) 
+            if (targetComment != null)
             {
                 targetComment.Body = newCommentBody;
                 _context.Comments.Update(targetComment);

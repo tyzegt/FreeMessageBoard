@@ -28,7 +28,7 @@ namespace FMB.Core.API.Controllers
 
             try
             {
-                await _postsService.CreatePostAsync(request.Post);
+                await _postsService.CreatePostAsync(request.Title, request.Body);
             }
             catch (Exception ex)
             {

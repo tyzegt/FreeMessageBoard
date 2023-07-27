@@ -7,7 +7,7 @@ namespace FMB.Services.Posts
 {
     public interface IPostsService
     {
-        Task CreatePostAsync(Post post);
+        Task CreatePostAsync(string title, string body);
         Task DeletePostAsync(long postId);
         Task<Post> GetPostAsync(long postId);
         Task UpdatePostAsync(long postId, string newPostBody, string? newPostTitle);

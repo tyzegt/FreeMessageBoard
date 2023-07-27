@@ -8,21 +8,30 @@ namespace FMB.Services.Posts
 {
     public class PostsService : IPostsService
     {
-        PostsContext _context;
-        public PostsService(PostsContext context)
+        private readonly PostsContext _context;
+        public PostsService(PostsContext context) 
         {
             _context = context;
         }
-        public async Task CreatePostAsync(Post post)
+        public async Task CreatePostAsync(string title, string body) // TODO ��������� �����
         {
-            await _context.Posts.AddAsync(post);
+            if(string.IsNullOrEmpty(title)) { throw new ArgumentNullException("title"); }
+            if(string.IsNullOrEmpty(body)) { throw new ArgumentNullException("body"); }
+
+            await _context.Posts.AddAsync(new Post()
+            {
+                Label = title,
+                Body = body,
+                CreatedAt = DateTime.Now,
+                Author = "TBD" // TODO current user id
+            });
             await _context.SaveChangesAsync();
         }
 
         public async Task DeletePostAsync(long postId)
         {
             var targetPost = await _context.Posts.FirstOrDefaultAsync(p => p.Id == postId);
-            if(targetPost != null)
+            if (targetPost != null)
             {
                 _context.Remove(targetPost);
                 await _context.SaveChangesAsync();
@@ -46,13 +55,13 @@ namespace FMB.Services.Posts
         }
  
 
-        public async Task UpdatePostAsync(long postId, string newPostBody, string? newPostTitle)
+        public async Task UpdatePostAsync(long postId, string newPostBody, string? newPostLabel)
         {
             var targetPost = await _context.Posts.FirstOrDefaultAsync(p => p.Id == postId);
-            if(targetPost != null)
+            if (targetPost != null)
             {
                 targetPost.Body = newPostBody;
-                targetPost.Label = string.IsNullOrEmpty(newPostTitle)? targetPost.Label : newPostTitle;
+                targetPost.Label = string.IsNullOrEmpty(newPostLabel) ? targetPost.Label : newPostLabel;
                 _context.Posts.Update(targetPost);
                 await _context.SaveChangesAsync();
             }

@@ -10,6 +10,7 @@ namespace FMB.Core.API.Models
 {
     public class CreatePostRequest
     {
-        public Post Post { get; set; }
+        public string Title { get; set; }
+        public string Body { get; set; }
     }
 }
