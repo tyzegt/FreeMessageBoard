@@ -1,9 +1,9 @@
-﻿using FMB.Core.API.Data;
+﻿using FMB.Core.API.Controllers.BaseController;
 using FMB.Core.API.Models;
+using FMB.Core.Data.Data;
+using FMB.Core.Data.Models.Tags;
 using FMB.Services.Tags;
-using FMB.Services.Tags.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -29,7 +29,7 @@ namespace FMB.Core.API.Controllers
             var tag = await _tagService.CreateTag(request.Name);
             if(tag == null)
                 return BadRequest(new ErrorView("TagAlreadyExists"));
-            
+
             return Ok(tag);
         }
 

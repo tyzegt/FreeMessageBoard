@@ -1,18 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
-using FMB.Services.Comments;
+using FMB.Core.API.Controllers.BaseController;
+using FMB.Core.API.Infrastructure.Services;
 using FMB.Core.API.Models;
-using FMB.Core.API.Data;
-using Microsoft.AspNetCore.Identity;
+using FMB.Core.Data.Data;
+using FMB.Core.Data.Models.Comments;
+using FMB.Services.Comments;
 using FMB.Services.Posts;
-using FMB.Core.API.Services;
-using FMB.Services.Comments.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FMB.Core.API.Controllers
 {
@@ -37,18 +31,18 @@ namespace FMB.Core.API.Controllers
             if (!TextValidator.IsCommentValid(request.Body))
                 return BadRequest(new ErrorView("InvalidCommentBody"));
 
-            if(!await _postService.IsPostExists(request.PostId))
+            if(!await _postService.IsPostExists(request.Id))
                 return BadRequest(new ErrorView("PostNotFound"));
 
             if(request.ParentCommentId > 0) 
             { 
-                if(!await _commentsService.IsCommentExists(request.ParentCommentId, request.PostId))
+                if(!await _commentsService.IsCommentExists(request.ParentCommentId, request.Id))
                     return BadRequest(new ErrorView("ParentCommentNotFound"));
             }
 
             try
             {
-                return await _commentsService.CreateCommentAsync(request.PostId, request.ParentCommentId, request.Body, CurrentUser.Id);
+                return await _commentsService.CreateCommentAsync(request.Id, request.ParentCommentId, request.Body, CurrentUser.Id);
             }
             catch (Exception ex)
             {

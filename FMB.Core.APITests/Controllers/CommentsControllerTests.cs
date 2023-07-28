@@ -1,4 +1,4 @@
-﻿using FMB.Core.API.Controllers.Comments;
+﻿using FMB.Core.API.Controllers;
 using FMB.Core.API.Controllers.Posts;
 using FMB.Core.Data.Models.Comments;
 using FMB.Services.Comments;
