@@ -22,62 +22,46 @@ namespace FMB.Core.API.Controllers
         }
 
         [HttpPost]
-        public ActionResult<long> CreateTag([FromBody] CreateTagRequest request)
+        public async Task<IActionResult> CreateTag([FromBody] CreateTagRequest request)
         {
             if(request == null) return new BadRequestObjectResult("empty request body");
 
-            try
-            {
-                return _tagService.CreateTag(request.Name);
-            }
-            catch (Exception ex)
-            {
-                return new BadRequestObjectResult(ex.Message);
-            }
-            return Ok();
+            var tag = await _tagService.CreateTag(request.Name);
+            if(tag == null)
+                return BadRequest(new ErrorView("TagAlreadyExists"));
+            
+            return Ok(tag);
         }
 
-        [HttpGet]
-        public ActionResult<Tag> GetTag(long id)
+        [HttpGet("{id:long}")]
+        public async Task<IActionResult> GetTag(long id)
         {
-            try
-            {
-                return _tagService.GetTag(id);
-            } 
-            catch (Exception ex) 
-            {
-                return new BadRequestObjectResult(ex.Message);
-            }
+            var tag = await _tagService.GetTag(id);
+            if(tag == null)
+                return BadRequest(new ErrorView("TagNotFound"));
+            
+            return Ok(tag);
         }
 
         [HttpPost]
-        public ActionResult UpdateTag([FromBody] UpdateTagRequest request)
+        public async Task<IActionResult> UpdateTag([FromBody] UpdateTagRequest request)
         {
-            if (request == null) return new BadRequestObjectResult("empty request body");
-
-            try
-            {
-                _tagService.UpdateTag(request.Id, request.NewName);
-            }
-            catch (Exception ex)
-            {
-                return new BadRequestObjectResult(ex.Message);
-            }
-            return Ok();
+            if(string.IsNullOrWhiteSpace(request.NewName))
+                return BadRequest(new ErrorView("EmptyNewName"));
+            
+            if (await _tagService.UpdateTag(request.Id, request.NewName))
+                return Ok();
+            
+            return BadRequest(new ErrorView("TagNotFound"));
         }
 
         [HttpDelete]
-        public ActionResult DeleteTag([FromBody] long id)
+        public async Task<IActionResult> DeleteTag([FromBody] long id)
         {
-            try
-            {
-                _tagService.DeleteTag(id);
-            }
-            catch (Exception ex)
-            {
-                return new BadRequestObjectResult(ex.Message);
-            }
-            return Ok();
+            if(await _tagService.DeleteTag(id))
+                return Ok();
+            
+            return BadRequest(new ErrorView("TagNotFound"));
         }
     }
 }

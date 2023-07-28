@@ -31,16 +31,19 @@ namespace FMB.Core.API.Controllers
         [HttpPost]
         public async Task<ActionResult<long>> CreateComment([FromBody] CreateCommentRequest request)
         {
-            if (request == null) { return new BadRequestObjectResult("empty request body"); }
-            if (!TextValidator.IsCommentValid(request.Body)) { return new BadRequestObjectResult("invelid comment text"); }
+            if (request == null)
+                return BadRequest(new ErrorView("EmptyRequestBody"));
 
-            var post = await _postService.GetPostAsync(request.PostId);
-            if (post == null) { return new BadRequestObjectResult("post not found"); }
+            if (!TextValidator.IsCommentValid(request.Body))
+                return BadRequest(new ErrorView("InvalidCommentBody"));
+
+            if(!await _postService.IsPostExists(request.PostId))
+                return BadRequest(new ErrorView("PostNotFound"));
 
             if(request.ParentCommentId > 0) 
             { 
-                var parentComment = await _commentsService.GetCommentAsync(request.ParentCommentId); 
-                if(parentComment == null) { return new BadRequestObjectResult("parent comment not found"); }
+                if(!await _commentsService.IsCommentExists(request.ParentCommentId, request.PostId))
+                    return BadRequest(new ErrorView("ParentCommentNotFound"));
             }
 
             try
@@ -49,7 +52,7 @@ namespace FMB.Core.API.Controllers
             }
             catch (Exception ex)
             {
-                return new BadRequestObjectResult(ex.Message);
+                return BadRequest(new ErrorView(ex.Message));
             }
         }
 
@@ -61,9 +64,13 @@ namespace FMB.Core.API.Controllers
         }
 
         [HttpGet] 
-        public async Task<Comment> GetCommentByIdAsync([FromBody] GetCommentRequest request)
+        public async Task<IActionResult> GetCommentByIdAsync([FromBody] GetCommentRequest request)
         {
-            return await _commentsService.GetCommentAsync(request.Id);
+            var comment = await _commentsService.GetCommentAsync(request.Id);
+            if (comment == null)
+                return BadRequest(new ErrorView("CommentNotFound"));
+
+            return Ok(comment);
         }
 
         [HttpDelete]
