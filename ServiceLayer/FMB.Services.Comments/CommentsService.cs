@@ -36,13 +36,8 @@ namespace FMB.Services.Comments
             await _context.SaveChangesAsync();
         }
 
-        public async Task<Comment> GetCommentAsync(long commentId)
-        {
-            var targetComment =  await _context.Comments
-                .FirstOrDefaultAsync(c => c.Id == commentId);
-            
-            return targetComment?? throw new Exception($"comment {commentId} not found");
-        }
+        public async Task<Comment?> GetCommentAsync(long commentId)
+            => await _context.Comments.FirstOrDefaultAsync(c => c.Id == commentId); //Передача ошибок через Exception дорогая
 
         public async Task<IEnumerable<Comment>> GetCommentsByParentCommentIdAsync(long parentCommentId)
         {
@@ -60,7 +55,7 @@ namespace FMB.Services.Comments
 
         public async Task UpdateCommentAsync(long commentId, string newCommentBody)
         {
-            if(string.IsNullOrEmpty(newCommentBody)) throw new ArgumentNullException("newCommentBody");
+            if(string.IsNullOrEmpty(newCommentBody)) throw new ArgumentNullException(nameof(newCommentBody));
             
             var targetComment = await _context.Comments.FirstOrDefaultAsync(c => c.Id == commentId);
             if (targetComment == null) throw new Exception($"comment {commentId} not found");
@@ -83,5 +78,8 @@ namespace FMB.Services.Comments
             _context.Update(targetComment);
             await _context.SaveChangesAsync();
         }
+
+        public Task<bool> IsCommentExists(long commentId, long postId)
+            => _context.Comments.AnyAsync(x => x.PostId == postId && x.Id == postId);
     }
 }

@@ -16,8 +16,8 @@ namespace FMB.Services.Posts
         }
         public async Task<long> CreatePostAsync(string title, string body, long userId) 
         {
-            if(string.IsNullOrEmpty(title)) { throw new ArgumentNullException("title"); }
-            if(string.IsNullOrEmpty(body)) { throw new ArgumentNullException("body"); }
+            if(string.IsNullOrEmpty(title)) { throw new ArgumentNullException(nameof(title)); }
+            if(string.IsNullOrEmpty(body)) { throw new ArgumentNullException(nameof(body)); }
 
             var post = new Post()
             {
@@ -53,8 +53,8 @@ namespace FMB.Services.Posts
 
         public async Task UpdatePostAsync(long postId, string newPostBody, string? newPostTitle)
         {
-            if(string.IsNullOrEmpty(newPostBody)) { throw new ArgumentNullException("newPostBody"); }
-            if(string.IsNullOrEmpty(newPostTitle)) { throw new ArgumentNullException("newPostTitle"); }
+            if(string.IsNullOrEmpty(newPostBody)) { throw new ArgumentNullException(nameof(newPostBody)); }
+            if(string.IsNullOrEmpty(newPostTitle)) { throw new ArgumentNullException(nameof(newPostTitle)); }
 
             var targetPost = await _context.Posts.FirstOrDefaultAsync(p => p.Id == postId);
             if (targetPost == null) throw new Exception($"post {postId} not found");
@@ -73,5 +73,13 @@ namespace FMB.Services.Posts
             _context.Posts.Update(targetPost);
             await _context.SaveChangesAsync();
         }
+
+        /// <summary>
+        /// Проверяет существует ли пост с таким Id
+        /// </summary>
+        /// <param name="postId"></param>
+        /// <returns></returns>
+        public Task<bool> IsPostExists(long postId)
+            => _context.Posts.AnyAsync(x => x.Id == postId);
     }
 }
