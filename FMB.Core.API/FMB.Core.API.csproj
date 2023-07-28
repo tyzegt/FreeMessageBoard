@@ -17,8 +17,10 @@
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.4" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.32.0" />
+    <PackageReference Include="System.ServiceModel.Http" Version="4.7.0" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\FMB.Core.Data\FMB.Core.Data.csproj" />
     <ProjectReference Include="..\ServiceLayer\FMB.Services.Comments\FMB.Services.Comments.csproj" />
     <ProjectReference Include="..\ServiceLayer\FMB.Services.Posts\FMB.Services.Posts.csproj" />
     <ProjectReference Include="..\ServiceLayer\FMB.Services.Tags\FMB.Services.Tags.csproj" />
