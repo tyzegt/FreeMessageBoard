@@ -1,23 +1,29 @@
-using FMB.Core.API.Controllers.BaseController;
-using FMB.Core.API.Infrastructure.Services;
-using FMB.Core.Data.Data;
-using FMB.Core.Data.Models.Comments;
-using FMB.Services.Comments;
-using FMB.Services.Comments.Models;
-using FMB.Services.Posts;
-using Microsoft.AspNetCore.Identity;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
+using FMB.Services.Comments;
+using FMB.Core.API.Models;
+using FMB.Core.API.Data;
+using Microsoft.AspNetCore.Identity;
+using FMB.Services.Posts;
+using FMB.Core.API.Services;
+using FMB.Services.Comments.Models;
 
-namespace FMB.Core.API.Controllers.Comments
+namespace FMB.Core.API.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
     public class CommentsController : BaseFMBController
     {
-        private readonly ICommentsService _commentsService;
-        private readonly IPostsService _postService;
+        private readonly ICommentsService _commentsService;   
+        private readonly IPostsService _postService;   
         public CommentsController(ICommentsService commentsService, IPostsService postService, IConfiguration config, UserManager<AppUser> userManager) : base(userManager, config)
-        {
+        { 
             _commentsService = commentsService;
             _postService = postService;
         }
@@ -25,25 +31,28 @@ namespace FMB.Core.API.Controllers.Comments
         [HttpPost]
         public async Task<ActionResult<long>> CreateComment([FromBody] CreateCommentRequest request)
         {
-            if (request == null) { return new BadRequestObjectResult("empty request body"); }
-            if (!TextValidator.IsCommentValid(request.Body)) { return new BadRequestObjectResult("invelid comment text"); }
+            if (request == null)
+                return BadRequest(new ErrorView("EmptyRequestBody"));
 
-            var post = await _postService.GetPostAsync(request.Id);
-            if (post == null) { return new BadRequestObjectResult("post not found"); }
+            if (!TextValidator.IsCommentValid(request.Body))
+                return BadRequest(new ErrorView("InvalidCommentBody"));
 
-            if (request.ParentCommentId > 0)
-            {
-                var parentComment = await _commentsService.GetCommentAsync(request.ParentCommentId);
-                if (parentComment == null) { return new BadRequestObjectResult("parent comment not found"); }
+            if(!await _postService.IsPostExists(request.PostId))
+                return BadRequest(new ErrorView("PostNotFound"));
+
+            if(request.ParentCommentId > 0) 
+            { 
+                if(!await _commentsService.IsCommentExists(request.ParentCommentId, request.PostId))
+                    return BadRequest(new ErrorView("ParentCommentNotFound"));
             }
 
             try
             {
-                return await _commentsService.CreateCommentAsync(request.Id, request.ParentCommentId, request.Body, CurrentUser.Id);
+                return await _commentsService.CreateCommentAsync(request.PostId, request.ParentCommentId, request.Body, CurrentUser.Id);
             }
             catch (Exception ex)
             {
-                return new BadRequestObjectResult(ex.Message);
+                return BadRequest(new ErrorView(ex.Message));
             }
         }
 
@@ -54,10 +63,14 @@ namespace FMB.Core.API.Controllers.Comments
             return Ok(comments);
         }
 
-        [HttpGet]
-        public async Task<Comment> GetCommentByIdAsync([FromBody] GetCommentRequest request)
+        [HttpGet] 
+        public async Task<IActionResult> GetCommentByIdAsync([FromBody] GetCommentRequest request)
         {
-            return await _commentsService.GetCommentAsync(request.Id);
+            var comment = await _commentsService.GetCommentAsync(request.Id);
+            if (comment == null)
+                return BadRequest(new ErrorView("CommentNotFound"));
+
+            return Ok(comment);
         }
 
         [HttpDelete]

@@ -1,4 +1,5 @@
 ﻿using FMB.Services.Tags.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace FMB.Services.Tags
 {
@@ -11,53 +12,35 @@ namespace FMB.Services.Tags
             _tagsContext = tagsContext;
         }
 
-        public long CreateTag(string name)
+        public async Task<Tag?> CreateTag(string name)
         {
-            if(string.IsNullOrEmpty(name)) throw new ArgumentNullException("name");
+            if (string.IsNullOrWhiteSpace(name))
+                return null;
 
-            if (_tagsContext.Tags.Any(x => x.Name == name)) throw new ArgumentException($"tag '{name}' already exists");
+            if (await _tagsContext.Tags.AnyAsync(x => x.Name == name))
+                return null;
+            
             var tag = new Tag { Name = name };
+            
             _tagsContext.Tags.Add(tag);
-            _tagsContext.SaveChanges();
-            return tag.Id;
+            await _tagsContext.SaveChangesAsync();
+            return tag;
         }
 
-        public Tag GetTag(long id)
+        public Task<Tag?> GetTag(long id)
+            => _tagsContext.Tags.FirstOrDefaultAsync(x => x.Id == id);
+
+        public async Task<bool> UpdateTag(long id, string name)
         {
-            var tag = _tagsContext.Tags.FirstOrDefault(x => x.Id == id);
-            if (tag != null) return tag;
-            throw new KeyNotFoundException($"tag with id '{id}' not found");
-        }
+            if (string.IsNullOrWhiteSpace(name))
+                return false;
 
-        public void UpdateTag(long id, string name)
-        {
-            if (string.IsNullOrEmpty(name)) throw new ArgumentNullException("name");
-
-            var tag = _tagsContext.Tags.FirstOrDefault(x => x.Id == id);
-            if (tag != null)
-            {
-                tag.Name = name;
-                _tagsContext.SaveChanges();
-            }
-            else
-            {
-                throw new KeyNotFoundException($"tag with id '{id}' not found");
-            }
+            return await _tagsContext.Tags.Where(x => x.Id == id)
+                .ExecuteUpdateAsync(setters => setters.SetProperty(x => x.Name, name)) > 0;
 
         }
 
-        public void DeleteTag(long id) // consider DTO
-        {
-            var tag = _tagsContext.Tags.FirstOrDefault(x => x.Id == id);
-            if (tag != null)
-            {
-                _tagsContext.Remove(tag);
-                _tagsContext.SaveChanges();
-            }
-            else
-            {
-                throw new KeyNotFoundException($"tag with id '{id}' not found");
-            }
-        }
+        public async Task<bool> DeleteTag(long id) // consider DTO
+            => await _tagsContext.Tags.Where(x => x.Id == id).ExecuteDeleteAsync() > 0;
     }
 }
