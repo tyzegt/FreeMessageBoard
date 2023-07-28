@@ -1,5 +1,6 @@
-﻿using FMB.Core.API.Controllers;
-using FMB.Core.API.Models;
+﻿using FMB.Core.API.Controllers.Comments;
+using FMB.Core.API.Controllers.Posts;
+using FMB.Core.Data.Models.Comments;
 using FMB.Services.Comments;
 using FMB.Services.Comments.Models;
 using FMB.Services.Posts;
@@ -7,11 +8,6 @@ using FMB.Services.Posts.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FMB.Core.APITests.Controllers
 {
@@ -40,12 +36,12 @@ namespace FMB.Core.APITests.Controllers
         {
             var commentText = "commentText";
 
-            var testPostId = PostsController.CreatePost(new CreatePostRequest { Title = "test", Body = "test" }).Result.Value;
+            var testPostId = PostsController.CreatePost(new Data.Models.Posts.CreatePostRequest { Title = "test", Body = "test" }).Result.Value;
 
             var createCommentResponse = CommentsController.CreateComment(new CreateCommentRequest
             {
                 Body = commentText,
-                PostId = testPostId
+                Id = testPostId
             }).Result;
             Assert.IsNotNull(createCommentResponse);
 

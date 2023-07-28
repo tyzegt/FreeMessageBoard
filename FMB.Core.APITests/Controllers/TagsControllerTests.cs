@@ -1,4 +1,5 @@
-﻿using FMB.Core.API.Controllers;
+﻿using FMB.Core.API.Controllers.Tags;
+using FMB.Core.Data.Models.Tags;
 using FMB.Services.Tags;
 using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -23,14 +24,14 @@ namespace FMB.Core.APITests.Controllers
         {
 
             var newTagName = Guid.NewGuid().ToString("N");
-            var createTagResult = Controller.CreateTag(new API.Models.CreateTagRequest { Name = newTagName }).Value;
+            var createTagResult = Controller.CreateTag(new CreateTagRequest { Name = newTagName }).Value;
             Assert.IsTrue(createTagResult > 0);
 
             var getTagResult = Controller.GetTag(createTagResult).Value;
             Assert.IsTrue(getTagResult.Name == newTagName);
 
             var renamedTagTame = Guid.NewGuid().ToString("N");
-            var updateTagResult = Controller.UpdateTag(new API.Models.UpdateTagRequest { Id = getTagResult.Id, NewName = renamedTagTame });
+            var updateTagResult = Controller.UpdateTag(new UpdateTagRequest { Id = getTagResult.Id, NewName = renamedTagTame });
             var tag = Context.Tags.FirstOrDefault(x => x.Id == getTagResult.Id);
             Assert.IsNotNull(tag);
             Assert.AreEqual(tag.Name, renamedTagTame);

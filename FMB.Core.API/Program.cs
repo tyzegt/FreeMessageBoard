@@ -1,5 +1,5 @@
-using FMB.Core.API.Data;
-using FMB.Core.API.Services.Identity;
+using FMB.Core.API.Infrastructure.Services.Identity;
+using FMB.Core.Data.Data;
 using FMB.Services.Comments;
 using FMB.Services.Comments.Models;
 using FMB.Services.Posts;

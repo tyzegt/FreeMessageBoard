@@ -1,17 +1,10 @@
-﻿using FMB.Core.API.Controllers;
-using FMB.Core.API.Models;
+﻿using FMB.Core.API.Controllers.Posts;
+using FMB.Core.Data.Models.Posts;
 using FMB.Services.Posts;
 using FMB.Services.Posts.Models;
-using FMB.Services.Tags;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FMB.Core.APITests.Controllers
 {
