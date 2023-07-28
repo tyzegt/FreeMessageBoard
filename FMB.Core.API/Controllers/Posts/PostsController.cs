@@ -38,6 +38,13 @@ namespace FMB.Core.API.Controllers.Posts
             }
         }
 
+        [HttpPost]
+        public async Task<IActionResult> RatePost(RatePostRequest request)
+        {
+            await _postsService.RatePostAsync(request.Id, request.Plus ? PostMarks.Plus : PostMarks.Minus, CurrentUser.Id);
+            return Ok();
+        }
+
         [HttpGet]
         public async Task<Post> GetPostByIdAsync([FromBody] GetPostRequest request)
         {
