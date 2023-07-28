@@ -1,6 +1,7 @@
 ﻿using FMB.Core.API.Controllers;
 using FMB.Core.API.Models;
 using FMB.Services.Posts;
+using FMB.Services.Posts.Models;
 using FMB.Services.Tags;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;

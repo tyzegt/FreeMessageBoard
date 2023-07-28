@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using FMB.Services.Posts.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace FMB.Services.Posts

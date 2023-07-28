@@ -2,12 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using FMB.Services.Comments.Models;
 
 namespace FMB.Services.Comments
 {
     public interface ICommentsService
     {
-        Task CreateCommentAsync(long postId, long parentCommentId, string body);
+        Task<long> CreateCommentAsync(long postId, long parentCommentId, string body, long userId);
         Task DeleteCommentAsync(long commentId);
         Task<Comment> GetCommentAsync(long commentId);
         Task UpdateCommentAsync(long commentId, string newCommentBody);

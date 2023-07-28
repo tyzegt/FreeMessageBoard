@@ -1,7 +1,9 @@
 using FMB.Core.API.Data;
 using FMB.Core.API.Services.Identity;
-using FMB.Services.Comments; 
+using FMB.Services.Comments;
+using FMB.Services.Comments.Models;
 using FMB.Services.Posts;
+using FMB.Services.Posts.Models;
 using FMB.Services.Tags;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -12,8 +14,8 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 
-namespace FMB.Core.API; 
-    public class Program
+namespace FMB.Core.API;
+public class Program
     {
         public static void Main(string[] args)
         {

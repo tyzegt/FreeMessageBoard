@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http; 
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using FMB.Services.Comments;
 using FMB.Core.API.Models;
@@ -12,6 +12,7 @@ using FMB.Core.API.Data;
 using Microsoft.AspNetCore.Identity;
 using FMB.Services.Posts;
 using FMB.Core.API.Services;
+using FMB.Services.Comments.Models;
 
 namespace FMB.Core.API.Controllers
 {
@@ -28,7 +29,7 @@ namespace FMB.Core.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateComment([FromBody] CreateCommentRequest request)
+        public async Task<ActionResult<long>> CreateComment([FromBody] CreateCommentRequest request)
         {
             if (request == null) { return new BadRequestObjectResult("empty request body"); }
             if (!TextValidator.IsCommentValid(request.Body)) { return new BadRequestObjectResult("invelid comment text"); }
@@ -44,13 +45,12 @@ namespace FMB.Core.API.Controllers
 
             try
             {
-                await _commentsService.CreateCommentAsync(request.PostId, request.ParentCommentId, request.Body);
+                return await _commentsService.CreateCommentAsync(request.PostId, request.ParentCommentId, request.Body, CurrentUser.Id);
             }
             catch (Exception ex)
             {
                 return new BadRequestObjectResult(ex.Message);
             }
-            return Ok();
         }
 
         [HttpGet]

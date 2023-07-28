@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http; 
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using FMB.Services.Posts;
 using FMB.Core.API.Models;
@@ -12,6 +12,7 @@ using FMB.Core.API.Data;
 using Microsoft.AspNetCore.Identity;
 using FMB.Core.API.Services;
 using Microsoft.AspNetCore.Authorization;
+using FMB.Services.Posts.Models;
 
 namespace FMB.Core.API.Controllers
 {

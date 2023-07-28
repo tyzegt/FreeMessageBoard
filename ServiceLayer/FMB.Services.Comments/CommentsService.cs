@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using FMB.Services.Comments.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace FMB.Services.Comments
@@ -13,17 +14,19 @@ namespace FMB.Services.Comments
         {
             _context = context;
         }
-        public async Task CreateCommentAsync(long postId, long parentCommentId, string body)
-    {
-            await _context.Comments.AddAsync(new Comment
+        public async Task<long> CreateCommentAsync(long postId, long parentCommentId, string body, long userId)
+        {
+            var comment = new Comment
             {
                 PostId = postId,
                 ParentCommentId = parentCommentId,
                 Body = body,
                 CreatedAt = DateTime.UtcNow,
-                UserId = 123 // TODO current user
-            });
+                UserId = userId
+            };
+            await _context.Comments.AddAsync(comment);
             await _context.SaveChangesAsync();
+            return comment.Id;
         }
 
         public async Task DeleteCommentAsync(long commentId)
