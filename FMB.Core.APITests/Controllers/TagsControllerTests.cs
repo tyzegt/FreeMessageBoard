@@ -1,4 +1,5 @@
 ﻿using FMB.Core.API.Controllers;
+using FMB.Core.Data.Models.Tags;
 using FMB.Services.Tags;
 using FMB.Services.Tags.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -24,7 +25,7 @@ namespace FMB.Core.APITests.Controllers
         public async Task TagsFullTest()
         {
             var newTagName = Guid.NewGuid().ToString("N");
-            var createTagResult = await Controller.CreateTag(new API.Models.CreateTagRequest { Name = newTagName });
+            var createTagResult = await Controller.CreateTag(new CreateTagRequest { Name = newTagName });
             
             Assert.IsNotNull(createTagResult);
             Assert.IsInstanceOfType(createTagResult, typeof(OkObjectResult));
@@ -41,11 +42,12 @@ namespace FMB.Core.APITests.Controllers
             Assert.IsNotNull(tag);
             Assert.IsTrue(tag.Id == tagId);
             Assert.IsTrue(tag.Name == newTagName);
-            
+
             var renamedTagTame = Guid.NewGuid().ToString("N");
-            var updateTagResult = await Controller.UpdateTag(new API.Models.UpdateTagRequest { Id = tagId, NewName = renamedTagTame });
+            var updateTagResult = await Controller.UpdateTag(new UpdateTagRequest { Id = tagId, NewName = renamedTagTame });
             Assert.IsNotNull(updateTagResult);
             Assert.IsInstanceOfType(updateTagResult, typeof(OkResult));
+            Context.Entry(tag).Reload();
             tag = Context.Tags.FirstOrDefault(x => x.Id == tagId);
             Assert.IsNotNull(tag);
             Assert.AreEqual(renamedTagTame, tag.Name);
