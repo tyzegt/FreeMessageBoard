@@ -2,6 +2,7 @@
 using FMB.Core.Data.Models.Posts;
 using FMB.Services.Posts;
 using FMB.Services.Posts.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -37,6 +38,25 @@ namespace FMB.Core.APITests.Controllers
             Context.Remove(createdPost);
             Context.SaveChanges();
             Assert.IsFalse(Context.Posts.Any(x => x.Id == createPostResult.Value));
+        }
+
+        [TestMethod()]
+        public void RatePostTest()
+        {
+            var postId = Controller.CreatePost(new CreatePostRequest { Title = "test", Body = "test" }).Result.Value;
+            var ratePostResult = Controller.RatePost(new RatePostRequest { Id = postId, Plus = true }).Result;
+            var mark = Context.PostMarks.AsNoTracking().FirstOrDefault(x => x.PostId == postId && x.UserId == -1);
+            Assert.IsNotNull(mark);
+            Assert.IsTrue(mark.Mark == PostMarks.Plus);
+
+            ratePostResult = Controller.RatePost(new RatePostRequest { Id = postId, Plus = false }).Result;
+            mark = Context.PostMarks.AsNoTracking().FirstOrDefault(x => x.PostId == postId && x.UserId == -1);
+            Assert.IsNotNull(mark);
+            Assert.IsTrue(mark.Mark == PostMarks.Minus);
+
+            ratePostResult = Controller.RatePost(new RatePostRequest { Id = postId, Plus = false }).Result;
+            mark = Context.PostMarks.AsNoTracking().FirstOrDefault(x => x.PostId == postId && x.UserId == -1);
+            Assert.IsNull(mark);
         }
     }
 }

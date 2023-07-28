@@ -65,14 +65,28 @@ namespace FMB.Services.Posts
             await _context.SaveChangesAsync();
         }
 
-        public async Task AddPostmarkAsync(long postId, PostMark mark)
+        public async Task RatePostAsync(long postId, PostMarks newMark, long userId)
         {
             var targetPost = _context.Posts.FirstOrDefault(p => p.Id == postId);
             if (targetPost == null) throw new Exception($"post {postId} not found");
-            
-            _context.Posts.Update(targetPost);
+
+            var mark = _context.PostMarks.FirstOrDefault(p => p.UserId == userId && p.PostId == postId);
+            if (mark == null)
+            {
+                mark = new PostMark { PostId = postId, UserId = userId, Mark = newMark };
+                _context.PostMarks.Add(mark);
+            }
+            else if (mark.Mark == newMark)
+            {
+                _context.Remove(mark);
+            } else
+            {
+                mark.Mark = newMark;
+            }
+
             await _context.SaveChangesAsync();
         }
+
 
         /// <summary>
         /// Проверяет существует ли пост с таким Id
