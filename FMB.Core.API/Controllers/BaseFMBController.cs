@@ -21,6 +21,6 @@ namespace FMB.Core.API.Controllers
             _userManager = userManager;
         }
 
-        public AppUser CurrentUser => _userManager.FindByNameAsync(User.Identity?.Name ?? "").Result;
+        public AppUser CurrentUser => _userManager.FindByNameAsync(User?.Identity?.Name ?? "").Result;
     }
 }

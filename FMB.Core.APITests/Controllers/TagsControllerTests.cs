@@ -18,28 +18,34 @@ namespace FMB.Core.API.Controllers.Tests
     [TestClass()]
     public class TagsControllerTests
     {
+        TagsContext Context;
+        TagsController Controller;
+
+        public TagsControllerTests()
+        {
+            Context = new TagsContext(); // TODO consider standalone or fake context for api tests
+            Controller = new TagsController(new TagService(Context), Mock.Of<IConfiguration>(), FakeUserManager.GetInstance());
+        }
 
         [TestMethod()]
         public void TagsFullTest()
         {
-            var context = new TagsContext(); // TODO consider standalone or fake context for api tests
-            var controller = new TagsController(new TagService(context), Mock.Of<IConfiguration>(), FakeUserManager.GetInstance());
 
             var newTagName = Guid.NewGuid().ToString("N");
-            var createTagResult = controller.CreateTag(new Models.CreateTagRequest { Name = newTagName }).Value;
+            var createTagResult = Controller.CreateTag(new Models.CreateTagRequest { Name = newTagName }).Value;
             Assert.IsTrue(createTagResult > 0);
 
-            var getTagResult = controller.GetTag(createTagResult).Value;
+            var getTagResult = Controller.GetTag(createTagResult).Value;
             Assert.IsTrue(getTagResult.Name == newTagName);
 
             var renamedTagTame = Guid.NewGuid().ToString("N");
-            var updateTagResult = controller.UpdateTag(new Models.UpdateTagRequest { Id = getTagResult.Id, NewName = renamedTagTame });
-            var tag = context.Tags.FirstOrDefault(x => x.Id == getTagResult.Id);
+            var updateTagResult = Controller.UpdateTag(new Models.UpdateTagRequest { Id = getTagResult.Id, NewName = renamedTagTame });
+            var tag = Context.Tags.FirstOrDefault(x => x.Id == getTagResult.Id);
             Assert.IsNotNull(tag);
             Assert.AreEqual(tag.Name, renamedTagTame);
 
-            var deleteTagResult = controller.DeleteTag(tag.Id);
-            tag = context.Tags.FirstOrDefault(x => x.Id == getTagResult.Id);
+            var deleteTagResult = Controller.DeleteTag(tag.Id);
+            tag = Context.Tags.FirstOrDefault(x => x.Id == getTagResult.Id);
             Assert.IsNull(tag);
         }
     }

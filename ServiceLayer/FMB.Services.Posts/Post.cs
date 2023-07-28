@@ -11,11 +11,9 @@ namespace FMB.Services.Posts
     {
         public long Id { get; set; } 
         public DateTime CreatedAt { get; set; }
-        public string Author { get; set; }
-        public string Label { get; set; }
+        public long UserId { get; set; }
+        public string Title { get; set; }
         public string Body { get; set; }
-        public virtual ICollection<PostMark> PostMarks { get; set; } 
-        public string Title { get; set; } 
     }
     public class PostMark
     {

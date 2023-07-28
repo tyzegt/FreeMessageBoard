@@ -10,11 +10,14 @@ using FMB.Services.Posts;
 using FMB.Core.API.Models;
 using FMB.Core.API.Data;
 using Microsoft.AspNetCore.Identity;
+using FMB.Core.API.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FMB.Core.API.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
+    [Authorize]
     public class PostsController : BaseFMBController
     {
         private readonly IPostsService _postsService;   
@@ -24,19 +27,20 @@ namespace FMB.Core.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreatePost([FromBody] CreatePostRequest request)
+        public async Task<ActionResult<long>> CreatePost([FromBody] CreatePostRequest request)
         {
-            if(request == null) return new BadRequestObjectResult("empty request body");
+            if (request == null) { return new BadRequestObjectResult("empty request body"); }
+            if (!TextValidator.IsPostTitleTextValid(request.Title)) { return new BadRequestObjectResult("invalid post title"); }
+            if (!TextValidator.IsPostBodyTextValid(request.Body)) { return new BadRequestObjectResult("invalid post body"); }
 
             try
             {
-                await _postsService.CreatePostAsync(request.Title, request.Body);
+                return await _postsService.CreatePostAsync(request.Title, request.Body, CurrentUser.Id);
             }
             catch (Exception ex)
             {
                 return new BadRequestObjectResult(ex.Message);
             }
-            return Ok();
         }
 
         [HttpGet] 

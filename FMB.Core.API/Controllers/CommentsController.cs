@@ -10,6 +10,8 @@ using FMB.Services.Comments;
 using FMB.Core.API.Models;
 using FMB.Core.API.Data;
 using Microsoft.AspNetCore.Identity;
+using FMB.Services.Posts;
+using FMB.Core.API.Services;
 
 namespace FMB.Core.API.Controllers
 {
@@ -18,16 +20,27 @@ namespace FMB.Core.API.Controllers
     public class CommentsController : BaseFMBController
     {
         private readonly ICommentsService _commentsService;   
-        public CommentsController(ICommentsService commentsService, IConfiguration config, UserManager<AppUser> userManager) : base(userManager, config)
+        private readonly IPostsService _postService;   
+        public CommentsController(ICommentsService commentsService, IPostsService postService, IConfiguration config, UserManager<AppUser> userManager) : base(userManager, config)
         { 
             _commentsService = commentsService;
+            _postService = postService;
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateComment([FromBody] CreateCommentRequest request)
         {
-            if(request == null) return new BadRequestObjectResult("empty request body");
-            // TODO check body for invalid symbols or commands
+            if (request == null) { return new BadRequestObjectResult("empty request body"); }
+            if (!TextValidator.IsCommentValid(request.Body)) { return new BadRequestObjectResult("invelid comment text"); }
+
+            var post = await _postService.GetPostAsync(request.PostId);
+            if (post == null) { return new BadRequestObjectResult("post not found"); }
+
+            if(request.ParentCommentId > 0) 
+            { 
+                var parentComment = await _commentsService.GetCommentAsync(request.ParentCommentId); 
+                if(parentComment == null) { return new BadRequestObjectResult("parent comment not found"); }
+            }
 
             try
             {

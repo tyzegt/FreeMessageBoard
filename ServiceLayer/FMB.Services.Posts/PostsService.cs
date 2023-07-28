@@ -13,19 +13,22 @@ namespace FMB.Services.Posts
         {
             _context = context;
         }
-        public async Task CreatePostAsync(string title, string body) // TODO ��������� �����
+        public async Task<long> CreatePostAsync(string title, string body, long userId) 
         {
             if(string.IsNullOrEmpty(title)) { throw new ArgumentNullException("title"); }
             if(string.IsNullOrEmpty(body)) { throw new ArgumentNullException("body"); }
 
-            await _context.Posts.AddAsync(new Post()
+            var post = new Post()
             {
-                Label = title,
+                Title = title,
                 Body = body,
-                CreatedAt = DateTime.Now,
-                Author = "TBD" // TODO current user id
-            });
+                CreatedAt = DateTime.UtcNow,
+                UserId = userId
+            };
+
+            await _context.Posts.AddAsync(post);
             await _context.SaveChangesAsync();
+            return post.Id;
         }
 
         public async Task DeletePostAsync(long postId)
@@ -41,7 +44,6 @@ namespace FMB.Services.Posts
         public async Task<Post> GetPostAsync(long postId)
         {
             var targetPost = await _context.Posts
-                .Include(p => p.PostMarks)
                 .FirstOrDefaultAsync(p => p.Id == postId);
 
             return targetPost?? throw new Exception("Post doesn't exist");
@@ -67,7 +69,6 @@ namespace FMB.Services.Posts
             var targetPost = _context.Posts.FirstOrDefault(p => p.Id == postId);
             if (targetPost == null) throw new Exception($"post {postId} not found");
             
-            targetPost.PostMarks.Add(mark);
             _context.Posts.Update(targetPost);
             await _context.SaveChangesAsync();
         }
