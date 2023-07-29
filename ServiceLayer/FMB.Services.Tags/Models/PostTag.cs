@@ -10,6 +10,6 @@ namespace FMB.Services.Tags.Models
     {
         public long PostId { get; set; }
         public long TagId { get; set; }
-        public List<Tag> Tag { get; set; }
+        public Tag Tag { get; set; }
     }
 }
