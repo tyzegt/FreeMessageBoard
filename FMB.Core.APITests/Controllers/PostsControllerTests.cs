@@ -40,23 +40,6 @@ namespace FMB.Core.APITests.Controllers
             Assert.IsFalse(Context.Posts.Any(x => x.Id == createPostResult.Value));
         }
 
-        [TestMethod()]
-        public void RatePostTest()
-        {
-            var postId = Controller.CreatePost(new CreatePostRequest { Title = "test", Body = "test" }).Result.Value;
-            var ratePostResult = Controller.RatePost(new RatePostRequest { Id = postId, Plus = true }).Result;
-            var mark = Context.PostMarks.AsNoTracking().FirstOrDefault(x => x.PostId == postId && x.UserId == -1);
-            Assert.IsNotNull(mark);
-            Assert.IsTrue(mark.Mark == PostMarks.Plus);
 
-            ratePostResult = Controller.RatePost(new RatePostRequest { Id = postId, Plus = false }).Result;
-            mark = Context.PostMarks.AsNoTracking().FirstOrDefault(x => x.PostId == postId && x.UserId == -1);
-            Assert.IsNotNull(mark);
-            Assert.IsTrue(mark.Mark == PostMarks.Minus);
-
-            ratePostResult = Controller.RatePost(new RatePostRequest { Id = postId, Plus = false }).Result;
-            mark = Context.PostMarks.AsNoTracking().FirstOrDefault(x => x.PostId == postId && x.UserId == -1);
-            Assert.IsNull(mark);
-        }
     }
 }

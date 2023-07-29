@@ -16,8 +16,6 @@ namespace FMB.Services.Comments
 
         Task<IEnumerable<Comment>> GetCommentsByPostIdAsync(long postId);
         Task<IEnumerable<Comment>> GetCommentsByParentCommentIdAsync(long parentCommentId);
-        Task AddCommentMarkAsync(long commentId, CommentMark mark);
-        
         Task<bool> IsCommentExists(long commentId, long postId);
     }
 }

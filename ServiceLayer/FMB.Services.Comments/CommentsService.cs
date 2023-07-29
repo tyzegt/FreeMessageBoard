@@ -70,15 +70,6 @@ namespace FMB.Services.Comments
             return await _context.Comments.Where(c => c.PostId == postId).ToListAsync();
         }
 
-        public async Task AddCommentMarkAsync(long commentId, CommentMark mark)
-        {
-            var targetComment = _context.Comments.FirstOrDefault(c => c.Id == commentId);
-            if (targetComment == null) throw new Exception($"comment {commentId} not found");
-
-            _context.Update(targetComment);
-            await _context.SaveChangesAsync();
-        }
-
         public Task<bool> IsCommentExists(long commentId, long postId)
             => _context.Comments.AnyAsync(x => x.PostId == postId && x.Id == postId);
     }
