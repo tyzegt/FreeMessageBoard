@@ -1,5 +1,4 @@
-﻿using FMB.Core.Data.Data;
-using FMB.Core.Data.Models.BaseTypes;
+﻿using FMB.Core.Data.Models.BaseTypes;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
@@ -8,104 +7,70 @@ namespace FMB.Core.API.Controllers.BaseController
     public class ServiceEditor<T> : IServiceEditor<T> where T : IEntity
     {
 
-        // TODO: release when context to be add (IdentityContext exemple)
-        private readonly IdentityContext _identityContext;
-
-        public ServiceEditor(IdentityContext identityContext)
+        // TODO: release when context to be add
+        public Task Delete<TdentityType>(TdentityType id)
         {
-            _identityContext = identityContext;
+            throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<T>> Get()
+        public Task DeleteRange(IEnumerable<T> entities)
         {
-            return await _identityContext.Set<T>().ToListAsync();
+            throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<T>> Get(Expression<Func<T, bool>> expression)
+        public Task<bool> Exists(Expression<Func<T, bool>> predicate)
         {
-            return await _identityContext.Set<T>().Where(expression).ToListAsync();
+            throw new NotImplementedException();
         }
 
-        public async Task Post(T entity)
+        public Task<T> Find<IdentityType>(IdentityType id)
         {
-            _identityContext.Set<T>().Add(entity);
-            await _identityContext.SaveChangesAsync();
+            throw new NotImplementedException();
         }
 
-        public async Task Post(IEnumerable<T> entities)
+        public Task<T> Find(Expression<Func<T, bool>> expression)
         {
-            await _identityContext.Set<T>().AddRangeAsync(entities);
-            await _identityContext.SaveChangesAsync();
+            throw new NotImplementedException();
         }
 
-        public async Task Delete<TdentityType>(TdentityType id)
+        public Task<IEnumerable<T>> Get()
         {
-            var entity = await _identityContext.Set<T>().FindAsync(id);
-            entity.Archive = !entity.Archive;
-            _identityContext.Entry(entity).State = EntityState.Modified;
-            await _identityContext.SaveChangesAsync();
-            
+            throw new NotImplementedException();
         }
 
-        public async Task DeleteRange(IEnumerable<T> entities)
+        public Task<IEnumerable<T>> Get(Expression<Func<T, bool>> expression)
         {
-            _identityContext.Set<T>().RemoveRange(entities);
-            await _identityContext.SaveChangesAsync();
-        }
-
-        public async Task Put(T entity)
-        {
-            _identityContext.Set<T>().Update(entity);
-            await _identityContext.SaveChangesAsync();
-        }
-
-        public async Task Put(IEnumerable<T> entities)
-        {
-            _identityContext.Set<T>().UpdateRange(entities);
-            await _identityContext.SaveChangesAsync();
-        }
-
-        public async Task<T> Find<IdentityType>(IdentityType id)
-        {
-            return await _identityContext.Set<T>().FindAsync(id);
-        }
-
-        public async Task<T> Find(Expression<Func<T, bool>> expression)
-        {
-            return await _identityContext.Set<T>().FirstOrDefaultAsync(expression);
+            throw new NotImplementedException();
         }
 
         public IQueryable<T> Include(params Expression<Func<T, object>>[] includes)
         {
-            DbSet<T> dbSet = _identityContext.Set<T>();
-
-            IQueryable<T> query = null;
-            foreach (var include in includes)
-            {
-                query = (query ?? dbSet).Include(include);
-            }
-
-            return (query ?? dbSet);
+            throw new NotImplementedException();
         }
 
         public IQueryable<T> Include(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includes)
         {
-            IQueryable<T> dbSet = _identityContext.Set<T>().Where(predicate);
-
-            IQueryable<T> query = null;
-            foreach (var include in includes)
-            {
-                query = (query ?? dbSet).Include(include);
-            }
-
-            return (query ?? dbSet);
+            throw new NotImplementedException();
         }
 
-        public async Task<bool> Exists(Expression<Func<T, bool>> predicate)
+        public Task Post(T entity)
         {
-            return await _identityContext.Set<T>().AnyAsync(predicate);
+            throw new NotImplementedException();
         }
 
+        public Task Post(IEnumerable<T> entities)
+        {
+            throw new NotImplementedException();
+        }
 
+        public Task Put(T entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task Put(IEnumerable<T> entities)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
