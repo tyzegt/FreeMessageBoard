@@ -1,17 +1,33 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
-
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
-
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.20" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.20" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.9" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.9">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="6.32.0" />
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.32.0" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.4" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.32.0" />
+    <PackageReference Include="System.ServiceModel.Http" Version="4.7.0" />
   </ItemGroup>
-
   <ItemGroup>
-    <Folder Include="Controllers\" />
+    <ProjectReference Include="..\FMB.Core.Data\FMB.Core.Data.csproj" />
+    <ProjectReference Include="..\ServiceLayer\FMB.Services.Comments\FMB.Services.Comments.csproj" />
+    <ProjectReference Include="..\ServiceLayer\FMB.Services.Posts\FMB.Services.Posts.csproj" />
+    <ProjectReference Include="..\ServiceLayer\FMB.Services.Tags\FMB.Services.Tags.csproj" />
+    <ProjectReference Include="..\ServiceLayer\FMB.Services.Users\FMB.Services.Users.csproj" />
   </ItemGroup>
-
+  <ItemGroup> 
+    <ProjectReference Include="..\ServiceLayer\FMB.Services.Posts\FMB.Services.Posts.csproj" />
+    <ProjectReference Include="..\ServiceLayer\FMB.Services.Comments\FMB.Services.Comments.csproj" />
+  </ItemGroup> 
 </Project>
