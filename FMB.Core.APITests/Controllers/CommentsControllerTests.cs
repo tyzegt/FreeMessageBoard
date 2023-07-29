@@ -12,23 +12,11 @@ using Moq;
 namespace FMB.Core.APITests.Controllers
 {
     [TestClass()]
-    public class CommentsControllerTests
+    public class CommentsControllerTests : BaseControllerTestsClass
     {
-        PostsContext PostsContext; // TODO consider standalone or fake context for api tests
-        PostsController PostsController;
-        CommentsContext CommentsContext;
-        CommentsController CommentsController;
 
-        public CommentsControllerTests()
+        public CommentsControllerTests() : base()
         {
-            PostsContext = new PostsContext();
-            CommentsContext = new CommentsContext();
-
-            var postsService = new PostsService(PostsContext);
-            var fakeUserManager = FakeUserManager.GetInstance();
-
-            PostsController = new PostsController(postsService, Mock.Of<IConfiguration>(), fakeUserManager);
-            CommentsController = new CommentsController(new CommentsService(CommentsContext), postsService, Mock.Of<IConfiguration>(), fakeUserManager);
         }
 
         [TestMethod()]

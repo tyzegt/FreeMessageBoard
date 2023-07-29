@@ -51,14 +51,14 @@ namespace FMB.Core.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllCommentsByPostIdAsync(long postId)
+        public async Task<IActionResult> GetCommentsByPostId(long postId)
         {
-            var comments = await _commentsService.GetAllCommentsByPostIdAsync(postId);
+            var comments = await _commentsService.GetCommentsByPostIdAsync(postId);
             return Ok(comments);
         }
 
         [HttpGet] 
-        public async Task<IActionResult> GetCommentByIdAsync([FromBody] GetCommentRequest request)
+        public async Task<IActionResult> GetCommentById([FromBody] GetCommentRequest request)
         {
             var comment = await _commentsService.GetCommentAsync(request.Id);
             if (comment == null)
@@ -68,19 +68,21 @@ namespace FMB.Core.API.Controllers
         }
 
         [HttpDelete]
-        public async Task DeleteCommentAsync(long commentId)
+        public async Task<IActionResult> DeleteComment(long commentId)
         {
             // TODO only for moderator/admin
             await _commentsService.DeleteCommentAsync(commentId);
+            return Ok();
         }
 
         [HttpPost]
-        public async Task UpdateCommentAsync([FromBody] UpdateCommentRequest request)
+        public async Task<IActionResult> UpdateComment([FromBody] UpdateCommentRequest request)
         {
             // TODO check comment author
             // TODO check if update allowed
             // TODO check body
             await _commentsService.UpdateCommentAsync(request.Id, request.NewBody);
+            return Ok();
         }
     }
 }
