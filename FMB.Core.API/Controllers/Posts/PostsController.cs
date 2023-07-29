@@ -39,21 +39,20 @@ namespace FMB.Core.API.Controllers.Posts
         }
 
 
-
         [HttpGet]
-        public async Task<Post> GetPostByIdAsync([FromBody] GetPostRequest request)
+        public async Task<Post> GetPost([FromBody] GetPostRequest request) // TODO return DTO with rating, comments, tags
         {
             return await _postsService.GetPostAsync(request.Id);
         }
 
         [HttpDelete]
-        public async Task DeletePostAsync(long postId)
+        public async Task<IActionResult> DeletePost(long postId) // TODO only for moderators, consider archivation, add logging
         {
             await _postsService.DeletePostAsync(postId);
         }
 
         [HttpPost]
-        public async Task UpdatePostAsync([FromBody] UpdatePostRequest request)
+        public async Task<IActionResult> UpdatePost([FromBody] UpdatePostRequest request)
         {
             // TODO check author
             // TODO check body and title

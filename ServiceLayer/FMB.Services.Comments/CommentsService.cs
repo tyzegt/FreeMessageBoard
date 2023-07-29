@@ -65,11 +65,6 @@ namespace FMB.Services.Comments
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Comment>> GetAllCommentsByPostIdAsync(long postId)
-        {
-            return await _context.Comments.Where(c => c.PostId == postId).ToListAsync();
-        }
-
         public Task<bool> IsCommentExists(long commentId, long postId)
             => _context.Comments.AnyAsync(x => x.PostId == postId && x.Id == postId);
     }
