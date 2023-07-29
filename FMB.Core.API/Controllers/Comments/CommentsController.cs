@@ -72,6 +72,7 @@ namespace FMB.Core.API.Controllers
         {
             // TODO only for moderator/admin
             await _commentsService.DeleteCommentAsync(commentId);
+            return Ok();
         }
 
         [HttpPost]
@@ -81,6 +82,7 @@ namespace FMB.Core.API.Controllers
             // TODO check if update allowed
             // TODO check body
             await _commentsService.UpdateCommentAsync(request.Id, request.NewBody);
+            return Ok();
         }
     }
 }

@@ -49,6 +49,7 @@ namespace FMB.Core.API.Controllers.Posts
         public async Task<IActionResult> DeletePost(long postId) // TODO only for moderators, consider archivation, add logging
         {
             await _postsService.DeletePostAsync(postId);
+            return Ok();
         }
 
         [HttpPost]
@@ -57,6 +58,7 @@ namespace FMB.Core.API.Controllers.Posts
             // TODO check author
             // TODO check body and title
             await _postsService.UpdatePostAsync(request.Id, request.NewBody, request.NewTitle);
+            return Ok();
         }
     }
 }
