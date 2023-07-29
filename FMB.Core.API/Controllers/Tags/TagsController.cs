@@ -3,6 +3,7 @@ using FMB.Core.API.Models;
 using FMB.Core.Data.Data;
 using FMB.Core.Data.Models.Tags;
 using FMB.Services.Tags;
+using FMB.Services.Tags.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -62,6 +63,19 @@ namespace FMB.Core.API.Controllers
                 return Ok();
             
             return BadRequest(new ErrorView("TagNotFound"));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AssignPostTag([FromBody] long tagId, [FromBody] long postId)
+        {
+            await _tagService.AssignPostTag(tagId, postId);
+            return Ok();
+        }
+
+        [HttpPost]
+        public async Task<IEnumerable<Tag>> GetPostTags([FromBody] long postId)
+        {
+            return await _tagService.GetPostTags(postId);
         }
     }
 }

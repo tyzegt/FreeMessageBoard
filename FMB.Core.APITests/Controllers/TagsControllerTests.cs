@@ -1,17 +1,13 @@
 ﻿using FMB.Core.API.Controllers;
-using FMB.Core.API.Controllers.Marks;
 using FMB.Core.API.Controllers.Posts;
 using FMB.Core.Data.Models.Tags;
-using FMB.Services.Marks.Models;
-using FMB.Services.Marks;
-using FMB.Services.Posts;
-using FMB.Services.Posts.Models;
 using FMB.Services.Tags;
 using FMB.Services.Tags.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using FMB.Core.Data.Models.Posts;
+using Microsoft.EntityFrameworkCore;
 
 namespace FMB.Core.APITests.Controllers
 {
@@ -20,6 +16,31 @@ namespace FMB.Core.APITests.Controllers
     {
         public TagsControllerTests() : base()
         {
+        }
+
+        [TestMethod]
+        public async Task AssignGetAndDeleteTagsTests()
+        {
+            var postId = PostsController.CreatePost(new CreatePostRequest { Body = "test", Title = "test" }).Result.Value;
+
+            var tag1 = ((OkObjectResult)TagsController.CreateTag(new CreateTagRequest { Name = Guid.NewGuid().ToString("N") })
+                .Result).Value as Tag;
+            await TagsController.AssignPostTag(tag1.Id, postId);
+            Assert.IsTrue(TagsContext.PostTags.AsNoTracking().Any(x => x.PostId == postId && x.TagId == tag1.Id));
+
+            var tag2 = ((OkObjectResult)TagsController.CreateTag(new CreateTagRequest { Name = Guid.NewGuid().ToString("N") })
+                .Result).Value as Tag;
+            await TagsController.AssignPostTag(tag2.Id, postId);
+            Assert.IsTrue(TagsContext.PostTags.AsNoTracking().Any(x => x.PostId == postId && x.TagId == tag2.Id));
+
+            var postTags = await TagsController.GetPostTags(postId);
+            Assert.IsTrue(postTags.Any(x => x.Name == tag1.Name && x.Id == tag1.Id));
+            Assert.IsTrue(postTags.Any(x => x.Name == tag2.Name && x.Id == tag2.Id));
+
+            await TagsController.DeleteTag(tag1.Id);
+            await TagsController.DeleteTag(tag2.Id);
+            postTags = await TagsController.GetPostTags(postId);
+            Assert.IsFalse(postTags.Any());
         }
 
         [TestMethod]
