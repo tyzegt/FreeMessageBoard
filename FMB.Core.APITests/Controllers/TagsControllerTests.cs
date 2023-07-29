@@ -1,5 +1,11 @@
 ﻿using FMB.Core.API.Controllers;
+using FMB.Core.API.Controllers.Marks;
+using FMB.Core.API.Controllers.Posts;
 using FMB.Core.Data.Models.Tags;
+using FMB.Services.Marks.Models;
+using FMB.Services.Marks;
+using FMB.Services.Posts;
+using FMB.Services.Posts.Models;
 using FMB.Services.Tags;
 using FMB.Services.Tags.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -10,22 +16,17 @@ using Moq;
 namespace FMB.Core.APITests.Controllers
 {
     [TestClass()]
-    public class TagsControllerTests
+    public class TagsControllerTests : BaseControllerTestsClass
     {
-        TagsContext Context;
-        TagsController Controller;
-
-        public TagsControllerTests()
+        public TagsControllerTests() : base()
         {
-            Context = new TagsContext(); // TODO consider standalone or fake context for api tests
-            Controller = new TagsController(new TagService(Context), Mock.Of<IConfiguration>(), FakeUserManager.GetInstance());
         }
 
         [TestMethod]
         public async Task TagsFullTest()
         {
             var newTagName = Guid.NewGuid().ToString("N");
-            var createTagResult = await Controller.CreateTag(new CreateTagRequest { Name = newTagName });
+            var createTagResult = await TagsController.CreateTag(new CreateTagRequest { Name = newTagName });
             
             Assert.IsNotNull(createTagResult);
             Assert.IsInstanceOfType(createTagResult, typeof(OkObjectResult));
@@ -35,7 +36,7 @@ namespace FMB.Core.APITests.Controllers
 
             var tagId = tag.Id;
             
-            var getTagResult = await Controller.GetTag(tag.Id);
+            var getTagResult = await TagsController.GetTag(tag.Id);
             Assert.IsNotNull(getTagResult);
             Assert.IsInstanceOfType(getTagResult, typeof(OkObjectResult));
             tag = (getTagResult as OkObjectResult).Value as Tag;
@@ -44,18 +45,18 @@ namespace FMB.Core.APITests.Controllers
             Assert.IsTrue(tag.Name == newTagName);
 
             var renamedTagTame = Guid.NewGuid().ToString("N");
-            var updateTagResult = await Controller.UpdateTag(new UpdateTagRequest { Id = tagId, NewName = renamedTagTame });
+            var updateTagResult = await TagsController.UpdateTag(new UpdateTagRequest { Id = tagId, NewName = renamedTagTame });
             Assert.IsNotNull(updateTagResult);
             Assert.IsInstanceOfType(updateTagResult, typeof(OkResult));
-            Context.Entry(tag).Reload();
-            tag = Context.Tags.FirstOrDefault(x => x.Id == tagId);
+            TagsContext.Entry(tag).Reload();
+            tag = TagsContext.Tags.FirstOrDefault(x => x.Id == tagId);
             Assert.IsNotNull(tag);
             Assert.AreEqual(renamedTagTame, tag.Name);
             
-            var deleteTagResult = await Controller.DeleteTag(tagId);
+            var deleteTagResult = await TagsController.DeleteTag(tagId);
             Assert.IsNotNull(deleteTagResult);
             Assert.IsInstanceOfType(deleteTagResult, typeof(OkResult));
-            tag = Context.Tags.FirstOrDefault(x => x.Id == tagId);
+            tag = TagsContext.Tags.FirstOrDefault(x => x.Id == tagId);
             Assert.IsNull(tag);
         }
     }

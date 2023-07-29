@@ -19,26 +19,10 @@ using System.Threading.Tasks;
 namespace FMB.Core.APITests.Controllers
 {
     [TestClass]
-    public class MarksControllerTests
+    public class MarksControllerTests : BaseControllerTestsClass
     {
-        MarksContext MarksContext; // TODO consider standalone or fake context for api tests
-        MarksController MarksController;        
-        PostsContext PostsContext; 
-        PostsController PostsController;
-
-        public MarksControllerTests()
+        public MarksControllerTests() : base()
         {
-            MarksContext = new MarksContext();
-            PostsContext = new PostsContext();
-            MarksController = new MarksController(
-                new PostsService(PostsContext),
-                new MarksService(MarksContext), 
-                Mock.Of<IConfiguration>(), 
-                FakeUserManager.GetInstance());
-            PostsController = new PostsController(
-                new PostsService(PostsContext),
-                Mock.Of<IConfiguration>(), 
-                FakeUserManager.GetInstance());
         }
 
         [TestMethod]
