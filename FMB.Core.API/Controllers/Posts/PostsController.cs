@@ -6,7 +6,8 @@ using FMB.Services.Posts;
 using FMB.Services.Posts.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc; 
+using FMB.Core.API.Models; 
 
 namespace FMB.Core.API.Controllers.Posts
 {
@@ -58,11 +59,19 @@ namespace FMB.Core.API.Controllers.Posts
         }
 
         [HttpPost]
-        public async Task UpdatePostAsync([FromBody] UpdatePostRequest request)
+        public async Task<ActionResult> UpdatePostAsync([FromBody] UpdatePostRequest request)
         {
-            // TODO check author
-            // TODO check body and title
-            await _postsService.UpdatePostAsync(request.Id, request.NewBody, request.NewTitle);
+            if(string.IsNullOrEmpty(request.NewBody)) return BadRequest(new ErrorView("Empty body"));
+            var targetPost = await _postsService.GetPostAsync(request.Id);
+            var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+            if(targetPost != null 
+                && targetPost.UserId == currentUser.Id 
+                && (DateTime.UtcNow - targetPost.CreatedAt).Minutes < 30 )
+            { 
+                await _postsService.UpdatePostAsync(request.Id, request.NewBody, request.NewTitle?? targetPost.Title);
+                return Ok(targetPost);
+            } 
+            return BadRequest(new ErrorView("You're not allowed to edit this"));
         }
     }
 }

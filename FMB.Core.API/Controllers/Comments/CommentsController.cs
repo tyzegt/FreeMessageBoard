@@ -75,12 +75,19 @@ namespace FMB.Core.API.Controllers
         }
 
         [HttpPost]
-        public async Task UpdateCommentAsync([FromBody] UpdateCommentRequest request)
+        public async Task<ActionResult> UpdateCommentAsync([FromBody] UpdateCommentRequest request)
         {
-            // TODO check comment author
-            // TODO check if update allowed
-            // TODO check body
-            await _commentsService.UpdateCommentAsync(request.Id, request.NewBody);
+            if(string.IsNullOrEmpty(request.NewBody)) return BadRequest(new ErrorView("Empty body"));
+            var targetComment = await _commentsService.GetCommentAsync(request.Id);
+            var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+            if(targetComment != null 
+                && targetComment.UserId == currentUser.Id 
+                && (DateTime.UtcNow - targetComment.CreatedAt).Minutes < 30 )
+            { 
+                await _commentsService.UpdateCommentAsync(request.Id, request.NewBody);
+                return Ok(targetComment);
+            } 
+            return BadRequest(new ErrorView("You're not allowed to edit this"));
         }
     }
 }
