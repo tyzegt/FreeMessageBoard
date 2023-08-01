@@ -66,9 +66,9 @@ namespace FMB.Core.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AssignPostTag([FromBody] long tagId, [FromBody] long postId)
+        public async Task<IActionResult> AssignPostTag([FromBody] AssignTagRequest request)
         {
-            await _tagService.AssignPostTag(tagId, postId);
+            await _tagService.AssignPostTag(request.TagId, request.PostId);
             return Ok();
         }
 
