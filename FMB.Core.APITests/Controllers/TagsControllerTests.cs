@@ -25,12 +25,12 @@ namespace FMB.Core.APITests.Controllers
 
             var tag1 = ((OkObjectResult)TagsController.CreateTag(new CreateTagRequest { Name = Guid.NewGuid().ToString("N") })
                 .Result).Value as Tag;
-            await TagsController.AssignPostTag(tag1.Id, postId);
+            await TagsController.AssignPostTag(new AssignTagRequest { TagId = tag1.Id, PostId = postId });
             Assert.IsTrue(TagsContext.PostTags.AsNoTracking().Any(x => x.PostId == postId && x.TagId == tag1.Id));
 
             var tag2 = ((OkObjectResult)TagsController.CreateTag(new CreateTagRequest { Name = Guid.NewGuid().ToString("N") })
                 .Result).Value as Tag;
-            await TagsController.AssignPostTag(tag2.Id, postId);
+            await TagsController.AssignPostTag(new AssignTagRequest { TagId = tag2.Id, PostId = postId });
             Assert.IsTrue(TagsContext.PostTags.AsNoTracking().Any(x => x.PostId == postId && x.TagId == tag2.Id));
 
             var postTags = await TagsController.GetPostTags(postId);
