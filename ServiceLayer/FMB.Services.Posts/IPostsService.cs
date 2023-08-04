@@ -13,6 +13,5 @@ namespace FMB.Services.Posts
         Task<Post> GetPostAsync(long postId);
         Task UpdatePostAsync(long postId, string newPostBody, string? newPostTitle);
         Task<bool> IsPostExists(long postId);
-        Task RatePostAsync(long postId, PostMarks newMark, long userId);
     }
 }

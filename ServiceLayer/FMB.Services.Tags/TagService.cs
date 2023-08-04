@@ -42,5 +42,24 @@ namespace FMB.Services.Tags
 
         public async Task<bool> DeleteTag(long id) // consider DTO
             => await _tagsContext.Tags.Where(x => x.Id == id).ExecuteDeleteAsync() > 0;
+
+        public async Task AssignPostTag(long tagId, long postId)
+        {
+            if (_tagsContext.PostTags.Any(x => x.TagId == tagId && x.PostId == postId))
+            {
+                throw new Exception("tag already assigned");
+            }
+            _tagsContext.PostTags.Add(new PostTag { TagId = tagId, PostId = postId });
+            await _tagsContext.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<Tag>> GetPostTags(long postId)
+        {
+            return await _tagsContext.PostTags
+                .Where(x => x.PostId == postId)
+                .Include(x => x.Tag)
+                .Select(x => x.Tag)
+                .ToListAsync();
+        }
     }
 }

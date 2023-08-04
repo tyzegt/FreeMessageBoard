@@ -12,12 +12,8 @@ namespace FMB.Services.Comments
         Task DeleteCommentAsync(long commentId);
         Task<Comment?> GetCommentAsync(long commentId);
         Task UpdateCommentAsync(long commentId, string newCommentBody);
-        Task<IEnumerable<Comment>> GetAllCommentsByPostIdAsync(long postId);
-
         Task<IEnumerable<Comment>> GetCommentsByPostIdAsync(long postId);
         Task<IEnumerable<Comment>> GetCommentsByParentCommentIdAsync(long parentCommentId);
-        Task AddCommentMarkAsync(long commentId, CommentMark mark);
-        
         Task<bool> IsCommentExists(long commentId, long postId);
     }
 }

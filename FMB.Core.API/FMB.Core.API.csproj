@@ -21,6 +21,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FMB.Core.Data\FMB.Core.Data.csproj" />
+    <ProjectReference Include="..\FMB.Services.Marks\FMB.Services.Marks.csproj" />
     <ProjectReference Include="..\ServiceLayer\FMB.Services.Comments\FMB.Services.Comments.csproj" />
     <ProjectReference Include="..\ServiceLayer\FMB.Services.Posts\FMB.Services.Posts.csproj" />
     <ProjectReference Include="..\ServiceLayer\FMB.Services.Tags\FMB.Services.Tags.csproj" />

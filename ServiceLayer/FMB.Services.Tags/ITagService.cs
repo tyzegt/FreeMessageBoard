@@ -9,8 +9,10 @@ namespace FMB.Services.Tags
 {
     public interface ITagService
     {
+        Task AssignPostTag(long tagId, long postId);
         Task<Tag?> CreateTag(string name);
         Task<bool> DeleteTag(long id);
+        Task<IEnumerable<Tag>> GetPostTags(long postId);
         Task<Tag?> GetTag(long id);
         Task<bool> UpdateTag(long id, string name);
     }

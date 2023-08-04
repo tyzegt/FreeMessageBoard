@@ -39,23 +39,18 @@ namespace FMB.Core.API.Controllers.Posts
             }
         }
 
-        [HttpPost]
-        public async Task<IActionResult> RatePost(RatePostRequest request)
-        {
-            await _postsService.RatePostAsync(request.Id, request.Plus ? PostMarks.Plus : PostMarks.Minus, CurrentUser.Id);
-            return Ok();
-        }
 
         [HttpGet]
-        public async Task<Post> GetPostByIdAsync([FromBody] GetPostRequest request)
+        public async Task<Post> GetPost([FromBody] GetPostRequest request) // TODO return DTO with rating, comments, tags
         {
             return await _postsService.GetPostAsync(request.Id);
         }
 
         [HttpDelete]
-        public async Task DeletePostAsync(long postId)
+        public async Task<IActionResult> DeletePost(long postId) // TODO only for moderators, consider archivation, add logging
         {
             await _postsService.DeletePostAsync(postId);
+            return Ok();
         }
 
         [HttpPost]
