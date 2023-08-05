@@ -21,7 +21,27 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FMB.Core.APITests", "FMB.Co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FMB.Core.Data", "FMB.Core.Data\FMB.Core.Data.csproj", "{10B5F2CD-756D-4BBF-97A0-8A3BA039EED4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FMB.Services.Marks", "FMB.Services.Marks\FMB.Services.Marks.csproj", "{C4BDEF10-B11F-48BB-B50C-CFEA6C654006}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FMB.Services.Marks", "FMB.Services.Marks\FMB.Services.Marks.csproj", "{C4BDEF10-B11F-48BB-B50C-CFEA6C654006}"
+EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "FMB.Web", "FMB.Web\", "{A82F166E-5867-4B96-A758-606F29B12DA1}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.8"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_51750"
+		Debug.AspNetCompiler.PhysicalPath = "FMB.Web\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_51750\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/localhost_51750"
+		Release.AspNetCompiler.PhysicalPath = "FMB.Web\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_51750\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "51750"
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -61,6 +81,10 @@ Global
 		{C4BDEF10-B11F-48BB-B50C-CFEA6C654006}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C4BDEF10-B11F-48BB-B50C-CFEA6C654006}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C4BDEF10-B11F-48BB-B50C-CFEA6C654006}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A82F166E-5867-4B96-A758-606F29B12DA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A82F166E-5867-4B96-A758-606F29B12DA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A82F166E-5867-4B96-A758-606F29B12DA1}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{A82F166E-5867-4B96-A758-606F29B12DA1}.Release|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
