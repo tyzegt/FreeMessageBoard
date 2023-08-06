@@ -2,6 +2,7 @@ using FMB.Core.API.Infrastructure.Services.Identity;
 using FMB.Core.Data.Data;
 using FMB.Services.Comments;
 using FMB.Services.Comments.Models;
+using FMB.Services.Marks.Models;
 using FMB.Services.Posts;
 using FMB.Services.Posts.Models;
 using FMB.Services.Tags;
@@ -63,11 +64,19 @@ public class Program
             services.AddScoped<IPostsService, PostsService>();
             services.AddScoped<ICommentsService, CommentsService>();
 
-            services.AddDbContext<PostsContext>();
-            services.AddDbContext<TagsContext>(); 
-            services.AddDbContext<CommentsContext>();
+            services.AddDbContext<PostsContext>(options =>
+                options.UseNpgsql(builder.Configuration.GetConnectionString("PostsConnection")));
 
-            builder.Services.AddDbContext<IdentityContext>(options =>
+            services.AddDbContext<MarksContext>(options =>
+                options.UseNpgsql(builder.Configuration.GetConnectionString("MarksConnection")));
+
+            services.AddDbContext<TagsContext>(options =>
+                options.UseNpgsql(builder.Configuration.GetConnectionString("TagsConnection"))); 
+
+            services.AddDbContext<CommentsContext>(options =>
+                options.UseNpgsql(builder.Configuration.GetConnectionString("CommentsConnection")));
+
+            services.AddDbContext<IdentityContext>(options =>
                 options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             builder.Services.AddScoped<ITokenService, TokenService>();

@@ -16,6 +16,7 @@ using Moq;
 using Microsoft.Extensions.Configuration;
 using FMB.Services.Marks;
 using FMB.Services.Comments;
+using Microsoft.EntityFrameworkCore;
 
 namespace FMB.Core.APITests.Controllers
 {
@@ -34,26 +35,34 @@ namespace FMB.Core.APITests.Controllers
 
         public BaseControllerTestsClass()
         {
-            PostsContext = new PostsContext();
+            var postsOptions = new DbContextOptionsBuilder<PostsContext>();
+            postsOptions.UseNpgsql("Server=127.0.0.1;Port=5432;Database=PostsDB;User Id=postgres;Password=qwerty;");
+            PostsContext = new PostsContext(postsOptions.Options);
             PostsController = new PostsController(
                 new PostsService(PostsContext), 
                 Mock.Of<IConfiguration>(), 
                 FakeUserManager.GetInstance());
 
-            MarksContext = new MarksContext();
+            var marksOptions = new DbContextOptionsBuilder<MarksContext>();
+            marksOptions.UseNpgsql("Server=127.0.0.1;Port=5432;Database=MarksDB;User Id=postgres;Password=qwerty;");
+            MarksContext = new MarksContext(marksOptions.Options);
             MarksController = new MarksController(
                 new PostsService(PostsContext),
                 new MarksService(MarksContext),
                 Mock.Of<IConfiguration>(),
                 FakeUserManager.GetInstance());
 
-            TagsContext = new TagsContext(); 
+            var tagsOptions = new DbContextOptionsBuilder<TagsContext>();
+            tagsOptions.UseNpgsql("Server=127.0.0.1;Port=5432;Database=TagsDB;User Id=postgres;Password=qwerty;");
+            TagsContext = new TagsContext(tagsOptions.Options); 
             TagsController = new TagsController(
                 new TagService(TagsContext), 
                 Mock.Of<IConfiguration>(), 
                 FakeUserManager.GetInstance());
 
-            CommentsContext = new CommentsContext();
+            var commentsOptions = new DbContextOptionsBuilder<CommentsContext>();
+            commentsOptions.UseNpgsql("Server=127.0.0.1;Port=5432;Database=CommentsDB;User Id=postgres;Password=qwerty;");
+            CommentsContext = new CommentsContext(commentsOptions.Options);
             CommentsController = new CommentsController(
                 new CommentsService(CommentsContext), 
                 new PostsService(PostsContext), 

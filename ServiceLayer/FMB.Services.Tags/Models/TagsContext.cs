@@ -8,18 +8,15 @@ namespace FMB.Services.Tags
 {
     public class TagsContext : DbContext
     {
-        public TagsContext() // Не добавлять DI пока не покроем тестами
+        public DbSet<Tag> Tags { get; set; } 
+        public DbSet<PostTag> PostTags { get; set; }
+
+        public TagsContext(DbContextOptions<TagsContext> options)
+            : base(options)
         {
             Database.EnsureCreated();
-        }  
-        public DbSet<Tag> Tags { get; set; } 
-        public DbSet<PostTag> PostTags { get; set; } 
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            // Не убирать, пока не покроем всё тестами
-            optionsBuilder.UseNpgsql("Server=127.0.0.1;Port=5432;Database=TagsDB;User Id=postgres;Password=qwerty;");
         }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<PostTag>().HasKey(x => new { x.PostId, x.TagId });
