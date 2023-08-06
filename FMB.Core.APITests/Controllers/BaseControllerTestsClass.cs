@@ -43,15 +43,6 @@ namespace FMB.Core.APITests.Controllers
                 Mock.Of<IConfiguration>(), 
                 FakeUserManager.GetInstance());
 
-            var marksOptions = new DbContextOptionsBuilder<MarksContext>();
-            marksOptions.UseNpgsql("Server=127.0.0.1;Port=5432;Database=MarksDB;User Id=postgres;Password=qwerty;");
-            MarksContext = new MarksContext(marksOptions.Options);
-            MarksController = new MarksController(
-                new PostsService(PostsContext),
-                new MarksService(MarksContext),
-                Mock.Of<IConfiguration>(),
-                FakeUserManager.GetInstance());
-
             var tagsOptions = new DbContextOptionsBuilder<TagsContext>();
             tagsOptions.UseNpgsql("Server=127.0.0.1;Port=5432;Database=TagsDB;User Id=postgres;Password=qwerty;");
             TagsContext = new TagsContext(tagsOptions.Options); 
@@ -67,6 +58,16 @@ namespace FMB.Core.APITests.Controllers
                 new CommentsService(CommentsContext), 
                 new PostsService(PostsContext), 
                 Mock.Of<IConfiguration>(), 
+                FakeUserManager.GetInstance());
+
+            var marksOptions = new DbContextOptionsBuilder<MarksContext>();
+            marksOptions.UseNpgsql("Server=127.0.0.1;Port=5432;Database=MarksDB;User Id=postgres;Password=qwerty;");
+            MarksContext = new MarksContext(marksOptions.Options);
+            MarksController = new MarksController(
+                new PostsService(PostsContext),
+                new MarksService(MarksContext),
+                new CommentsService(CommentsContext),
+                Mock.Of<IConfiguration>(),
                 FakeUserManager.GetInstance());
         }
     }

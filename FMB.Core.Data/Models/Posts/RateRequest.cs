@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace FMB.Core.Data.Models.Posts
 {
-    public class RatePostRequest : IEntity<long>
+    public class RateRequest : IEntity<long>
     {
-        public bool Plus { get; set; }
+        public bool Upvote { get; set; }
     }
 }

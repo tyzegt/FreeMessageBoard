@@ -8,12 +8,13 @@ namespace FMB.Services.Comments
 {
     public interface ICommentsService
     {
-        Task<long> CreateCommentAsync(long postId, long parentCommentId, string body, long userId);
-        Task DeleteCommentAsync(long commentId);
-        Task<Comment?> GetCommentAsync(long commentId);
-        Task UpdateCommentAsync(long commentId, string newCommentBody);
-        Task<IEnumerable<Comment>> GetCommentsByPostIdAsync(long postId);
-        Task<IEnumerable<Comment>> GetCommentsByParentCommentIdAsync(long parentCommentId);
+        Task<long> CreateComment(long postId, long parentCommentId, string body, long userId);
+        Task DeleteComment(long commentId);
+        Task<Comment?> GetComment(long commentId);
+        Task UpdateComment(long commentId, string newCommentBody);
+        Task<IEnumerable<Comment>> GetCommentsByPostId(long postId);
+        Task<IEnumerable<Comment>> GetCommentsByParentCommentId(long parentCommentId);
         Task<bool> IsCommentExists(long commentId, long postId);
+        Task<bool> IsCommentExists(long commentId);
     }
 }

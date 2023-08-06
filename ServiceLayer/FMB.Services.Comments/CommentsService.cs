@@ -14,7 +14,7 @@ namespace FMB.Services.Comments
         {
             _context = context;
         }
-        public async Task<long> CreateCommentAsync(long postId, long parentCommentId, string body, long userId)
+        public async Task<long> CreateComment(long postId, long parentCommentId, string body, long userId)
         {
             var comment = new Comment
             {
@@ -29,31 +29,31 @@ namespace FMB.Services.Comments
             return comment.Id;
         }
 
-        public async Task DeleteCommentAsync(long commentId)
+        public async Task DeleteComment(long commentId)
         {
             var targetComment = await _context.Comments.FirstOrDefaultAsync(c => c.Id == commentId);
             if (targetComment != null) _context.Remove(targetComment);
             await _context.SaveChangesAsync();
         }
 
-        public async Task<Comment?> GetCommentAsync(long commentId)
+        public async Task<Comment?> GetComment(long commentId)
             => await _context.Comments.FirstOrDefaultAsync(c => c.Id == commentId); //Передача ошибок через Exception дорогая
 
-        public async Task<IEnumerable<Comment>> GetCommentsByParentCommentIdAsync(long parentCommentId)
+        public async Task<IEnumerable<Comment>> GetCommentsByParentCommentId(long parentCommentId)
         {
             return await _context.Comments
                 .Where(c => c.ParentCommentId == parentCommentId)
                 .ToListAsync(); 
         }
 
-        public async Task<IEnumerable<Comment>> GetCommentsByPostIdAsync(long postId)
+        public async Task<IEnumerable<Comment>> GetCommentsByPostId(long postId)
         {
             return await _context.Comments
                 .Where(c =>c.PostId == postId)
                 .ToListAsync();
         }
 
-        public async Task UpdateCommentAsync(long commentId, string newCommentBody)
+        public async Task UpdateComment(long commentId, string newCommentBody)
         {
             if(string.IsNullOrEmpty(newCommentBody)) throw new ArgumentNullException(nameof(newCommentBody));
             
@@ -66,6 +66,9 @@ namespace FMB.Services.Comments
         }
 
         public Task<bool> IsCommentExists(long commentId, long postId)
-            => _context.Comments.AnyAsync(x => x.PostId == postId && x.Id == postId);
+            => _context.Comments.AnyAsync(x => x.PostId == postId && x.Id == commentId);
+
+        public Task<bool> IsCommentExists(long commentId)
+            => _context.Comments.AnyAsync(x => x.Id == commentId);
     }
 }

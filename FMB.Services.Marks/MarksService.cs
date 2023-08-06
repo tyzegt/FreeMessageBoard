@@ -43,5 +43,33 @@ namespace FMB.Services.Marks
                 allVotes.Count(x => x.Mark == MarkEnum.Upvote), 
                 allVotes.Count(x => x.Mark == MarkEnum.Downvote));
         }
+
+        public async Task<Tuple<int, int>> GetCommentRating(long commentId)
+        {
+            var allVotes = await _context.CommentMarks.Where(x => x.CommentId == commentId).ToListAsync();
+            return new Tuple<int, int>(
+                allVotes.Count(x => x.Mark == MarkEnum.Upvote), 
+                allVotes.Count(x => x.Mark == MarkEnum.Downvote));
+        }
+
+        public async Task RateComment(long commentId, MarkEnum newMark, long userId)
+        {
+            var mark = _context.CommentMarks.FirstOrDefault(p => p.UserId == userId && p.CommentId == commentId);
+            if (mark == null)
+            {
+                mark = new CommentMark { CommentId = commentId, UserId = userId, Mark = newMark };
+                _context.CommentMarks.Add(mark);
+            }
+            else if (mark.Mark == newMark)
+            {
+                _context.Remove(mark);
+            }
+            else
+            {
+                mark.Mark = newMark;
+            }
+
+            await _context.SaveChangesAsync();
+        }
     }
 }

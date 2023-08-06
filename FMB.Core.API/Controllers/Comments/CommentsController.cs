@@ -42,7 +42,7 @@ namespace FMB.Core.API.Controllers
 
             try
             {
-                return await _commentsService.CreateCommentAsync(request.Id, request.ParentCommentId, request.Body, CurrentUser.Id);
+                return await _commentsService.CreateComment(request.Id, request.ParentCommentId, request.Body, CurrentUser.Id);
             }
             catch (Exception ex)
             {
@@ -53,14 +53,14 @@ namespace FMB.Core.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetCommentsByPostId(long postId)
         {
-            var comments = await _commentsService.GetCommentsByPostIdAsync(postId);
+            var comments = await _commentsService.GetCommentsByPostId(postId);
             return Ok(comments);
         }
 
         [HttpGet] 
         public async Task<IActionResult> GetCommentById([FromBody] GetCommentRequest request)
         {
-            var comment = await _commentsService.GetCommentAsync(request.Id);
+            var comment = await _commentsService.GetComment(request.Id);
             if (comment == null)
                 return BadRequest(new ErrorView("CommentNotFound"));
 
@@ -71,7 +71,7 @@ namespace FMB.Core.API.Controllers
         public async Task<IActionResult> DeleteComment(long commentId)
         {
             // TODO only for moderator/admin
-            await _commentsService.DeleteCommentAsync(commentId);
+            await _commentsService.DeleteComment(commentId);
             return Ok();
         }
 
@@ -81,7 +81,7 @@ namespace FMB.Core.API.Controllers
             // TODO check comment author
             // TODO check if update allowed
             // TODO check body
-            await _commentsService.UpdateCommentAsync(request.Id, request.NewBody);
+            await _commentsService.UpdateComment(request.Id, request.NewBody);
             return Ok();
         }
     }

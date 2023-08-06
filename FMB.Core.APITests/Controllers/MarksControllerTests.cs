@@ -1,5 +1,6 @@
 ﻿using FMB.Core.API.Controllers.Marks;
 using FMB.Core.API.Controllers.Posts;
+using FMB.Core.Data.Models.Comments;
 using FMB.Core.Data.Models.Posts;
 using FMB.Services.Marks;
 using FMB.Services.Marks.Models;
@@ -29,17 +30,17 @@ namespace FMB.Core.APITests.Controllers
         public void RatePostTest()
         {
             var postId = PostsController.CreatePost(new CreatePostRequest { Title = "test", Body = "test" }).Result.Value;
-            var ratePostResult = MarksController.RatePost(new RatePostRequest { Id = postId, Plus = true }).Result;
+            var ratePostResult = MarksController.RatePost(new RateRequest { Id = postId, Upvote = true }).Result;
             var mark = MarksContext.PostMarks.AsNoTracking().FirstOrDefault(x => x.PostId == postId && x.UserId == -1);
             Assert.IsNotNull(mark);
             Assert.IsTrue(mark.Mark == MarkEnum.Upvote);
 
-            ratePostResult = MarksController.RatePost(new RatePostRequest { Id = postId, Plus = false }).Result;
+            ratePostResult = MarksController.RatePost(new RateRequest { Id = postId, Upvote = false }).Result;
             mark = MarksContext.PostMarks.AsNoTracking().FirstOrDefault(x => x.PostId == postId && x.UserId == -1);
             Assert.IsNotNull(mark);
             Assert.IsTrue(mark.Mark == MarkEnum.Downvote);
 
-            ratePostResult = MarksController.RatePost(new RatePostRequest { Id = postId, Plus = false }).Result;
+            ratePostResult = MarksController.RatePost(new RateRequest { Id = postId, Upvote = false }).Result;
             mark = MarksContext.PostMarks.AsNoTracking().FirstOrDefault(x => x.PostId == postId && x.UserId == -1);
             Assert.IsNull(mark);
         }
@@ -70,6 +71,56 @@ namespace FMB.Core.APITests.Controllers
                 new PostMark { Mark = MarkEnum.Downvote, UserId = -9, PostId = postId });
             MarksContext.SaveChanges();
             rating = MarksController.GetPostRating(postId).Result.Value;
+            Assert.IsTrue(rating.Upvotes == 3 && rating.Downvotes == 6 && rating.Rating == -3);
+        }
+
+        [TestMethod]
+        public void RateCommentTest()
+        {
+            var postId = PostsController.CreatePost(new CreatePostRequest { Title = "test", Body = "test" }).Result.Value;
+            var commentId = CommentsController.CreateComment(new CreateCommentRequest { Id = postId, Body = "test" }).Result.Value;
+            var rateCommentResult = MarksController.RateComment(new RateRequest { Id = commentId, Upvote = true }).Result;
+            var mark = MarksContext.CommentMarks.AsNoTracking().FirstOrDefault(x => x.CommentId == commentId && x.UserId == -1);
+            Assert.IsNotNull(mark);
+            Assert.IsTrue(mark.CommentId == commentId && mark.Mark == MarkEnum.Upvote);
+
+            rateCommentResult = MarksController.RateComment(new RateRequest { Id = commentId, Upvote = false }).Result;
+            mark = MarksContext.CommentMarks.AsNoTracking().FirstOrDefault(x => x.CommentId == commentId && x.UserId == -1);
+            Assert.IsNotNull(mark);
+            Assert.IsTrue(mark.CommentId == commentId && mark.Mark == MarkEnum.Downvote);
+
+            rateCommentResult = MarksController.RateComment(new RateRequest { Id = commentId, Upvote = false }).Result;
+            mark = MarksContext.CommentMarks.AsNoTracking().FirstOrDefault(x => x.CommentId == commentId && x.UserId == -1);
+            Assert.IsNull(mark);
+        }
+
+        [TestMethod]
+        public void GetCommentRatingTest()
+        {
+            var postId = PostsController.CreatePost(new CreatePostRequest { Title = "test", Body = "test" }).Result.Value;
+            var commentId = CommentsController.CreateComment(new CreateCommentRequest { Id = postId, Body = "test" }).Result.Value;
+            MarksContext.AddRange(
+                new CommentMark { Mark = MarkEnum.Upvote, UserId = -1, CommentId = commentId },
+                new CommentMark { Mark = MarkEnum.Upvote, UserId = -2, CommentId = commentId },
+                new CommentMark { Mark = MarkEnum.Upvote, UserId = -3, CommentId = commentId });
+            MarksContext.SaveChanges();
+            var rating = MarksController.GetCommentRating(commentId).Result.Value;
+            Assert.IsTrue(rating.Upvotes == 3 && rating.Downvotes == 0 && rating.Rating == 3);
+
+            MarksContext.AddRange(
+                new CommentMark { Mark = MarkEnum.Downvote, UserId = -4, CommentId = commentId },
+                new CommentMark { Mark = MarkEnum.Downvote, UserId = -5, CommentId = commentId });
+            MarksContext.SaveChanges();
+            rating = MarksController.GetCommentRating(commentId).Result.Value;
+            Assert.IsTrue(rating.Upvotes == 3 && rating.Downvotes == 2 && rating.Rating == 1);
+
+            MarksContext.AddRange(
+                new CommentMark { Mark = MarkEnum.Downvote, UserId = -6, CommentId = commentId },
+                new CommentMark { Mark = MarkEnum.Downvote, UserId = -7, CommentId = commentId },
+                new CommentMark { Mark = MarkEnum.Downvote, UserId = -8, CommentId = commentId },
+                new CommentMark { Mark = MarkEnum.Downvote, UserId = -9, CommentId = commentId });
+            MarksContext.SaveChanges();
+            rating = MarksController.GetCommentRating(commentId).Result.Value;
             Assert.IsTrue(rating.Upvotes == 3 && rating.Downvotes == 6 && rating.Rating == -3);
         }
     }

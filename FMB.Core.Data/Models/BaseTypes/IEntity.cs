@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FMB.Core.Data.Models.BaseTypes
 {
+    // TODO: избавиться от IEntity, неоправданно усложняет читаемость, код становится неочевидным
     public class IEntity
     {
         [Display(Name = "Архивная запись")]
