@@ -1,6 +1,7 @@
 ﻿using FMB.Core.API.Controllers.BaseController;
 using FMB.Core.API.Models;
 using FMB.Core.Data.Data;
+using FMB.Core.Data.Models.Marks;
 using FMB.Core.Data.Models.Posts;
 using FMB.Services.Marks;
 using FMB.Services.Marks.Models;
@@ -31,8 +32,19 @@ namespace FMB.Core.API.Controllers.Marks
                 return BadRequest(new ErrorView("PostNotFound"));
             }
 
-            await _marksService.RatePostAsync(request.Id, request.Plus ? MarkEnum.Plus : MarkEnum.Minus, CurrentUser.Id);
+            await _marksService.RatePost(request.Id, request.Plus ? MarkEnum.Upvote : MarkEnum.Downvote, CurrentUser.Id);
             return Ok();
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<GetRatingResponse>> GetPostRating(long postId)
+        {
+            if (!await _postsService.IsPostExists(postId))
+            {
+                return BadRequest(new ErrorView("PostNotFound"));
+            }
+
+            return GetRatingResponse.MapFrom(await _marksService.GetPostRating(postId));
         }
     }
 }

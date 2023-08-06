@@ -16,7 +16,7 @@ namespace FMB.Services.Marks
             _context = context;
         }
 
-        public async Task RatePostAsync(long postId, MarkEnum newMark, long userId)
+        public async Task RatePost(long postId, MarkEnum newMark, long userId)
         {
             var mark = _context.PostMarks.FirstOrDefault(p => p.UserId == userId && p.PostId == postId);
             if (mark == null)
@@ -34,6 +34,14 @@ namespace FMB.Services.Marks
             }
 
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<Tuple<int, int>> GetPostRating(long postId)
+        {
+            var allVotes = await _context.PostMarks.Where(x => x.PostId == postId).ToListAsync();
+            return new Tuple<int, int>(
+                allVotes.Count(x => x.Mark == MarkEnum.Upvote), 
+                allVotes.Count(x => x.Mark == MarkEnum.Downvote));
         }
     }
 }

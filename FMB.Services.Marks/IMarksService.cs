@@ -9,6 +9,7 @@ namespace FMB.Services.Marks
 {
     public interface IMarksService
     {
-        Task RatePostAsync(long postId, MarkEnum newMark, long userId);
+        Task<Tuple<int, int>> GetPostRating(long postId);
+        Task RatePost(long postId, MarkEnum newMark, long userId);
     }
 }

@@ -8,7 +8,7 @@ namespace FMB.Services.Marks.Models
 {
     public enum MarkEnum
     {
-        Minus = 0,
-        Plus = 1
+        Downvote = 0,
+        Upvote = 1
     }
 }
