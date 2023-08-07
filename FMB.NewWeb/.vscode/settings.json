@@ -1,0 +1,17 @@
+{
+  "cSpell.words": [
+    "Vite",
+    "unocss",
+    "vitest",
+    "vueuse",
+    "pinia",
+    "vitejs",
+    "unplugin",
+    "pnpm"
+  ],
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode"
+}
