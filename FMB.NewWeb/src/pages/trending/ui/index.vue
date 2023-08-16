@@ -2,6 +2,7 @@
 </script>
 
 <template>
+    3
 </template>
 
 <style lang="scss">

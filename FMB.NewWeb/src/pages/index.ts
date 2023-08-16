@@ -9,7 +9,7 @@ import { Trending } from "./trending";
 export const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
-    component: async () => Registration,
+    component: async () => Home,
     meta: { layout: "Default" },
   },
   {
@@ -23,7 +23,7 @@ export const routes: Array<RouteRecordRaw> = [
     meta: { layout: "Home" },
   },
   {
-    path: "Trending",
+    path: "/trending",
     component: async () => Trending,
     meta: { layout: "Home" },
   },

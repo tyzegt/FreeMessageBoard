@@ -20,15 +20,9 @@ onBeforeMount(() => {
 </script>
 
 <template>
-  <div i-twemoji:waving-hand class="greet-icon" />
-  <UserCard class="user-card">
-    <template #user>
-      <div>{{ props.username }}!</div>
-    </template>
-    <template #ipAddress>
-      <div>IP Address: {{ ip }}</div>
-    </template>
-  </UserCard>
+    <router-link to="/top">top</router-link><br />
+    <router-link to="/trending">trending</router-link><br />
+    <router-link to="/new">new</router-link>
 </template>
 
 <style lang="scss">

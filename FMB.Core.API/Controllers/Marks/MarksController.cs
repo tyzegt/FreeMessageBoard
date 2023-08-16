@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FMB.Core.API.Controllers.Marks
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class MarksController : BaseFMBController
     {
