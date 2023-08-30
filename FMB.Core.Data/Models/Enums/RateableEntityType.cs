@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FMB.Services.Marks.Models
+namespace FMB.Core.Data.Models.Enums
 {
-    public enum MarkEnum
+    public enum RateableEntityType
     {
-        DownVote = 0,
-        UpVote = 1
+        None = 0,
+        Post = 1,
+        Comment = 2
     }
 }

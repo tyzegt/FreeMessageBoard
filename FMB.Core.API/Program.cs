@@ -2,6 +2,7 @@ using FMB.Core.API.Infrastructure.Services.Identity;
 using FMB.Core.Data.Data;
 using FMB.Services.Comments;
 using FMB.Services.Comments.Models;
+using FMB.Services.Marks;
 using FMB.Services.Marks.Models;
 using FMB.Services.Posts;
 using FMB.Services.Posts.Models;
@@ -63,6 +64,7 @@ public class Program
             services.AddScoped<ITagService, TagService>();
             services.AddScoped<IPostsService, PostsService>();
             services.AddScoped<ICommentsService, CommentsService>();
+            services.AddScoped<IMarksService, MarksService>();
 
             services.AddDbContext<PostsContext>(options =>
                 options.UseNpgsql(builder.Configuration.GetConnectionString("PostsConnection")));

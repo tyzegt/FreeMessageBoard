@@ -16,5 +16,6 @@ namespace FMB.Services.Comments
         Task<IEnumerable<Comment>> GetCommentsByParentCommentId(long parentCommentId);
         Task<bool> IsCommentExists(long commentId, long postId);
         Task<bool> IsCommentExists(long commentId);
+        Task<bool> IsCommentsExists(params long[] commentIds);
     }
 }

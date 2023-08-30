@@ -41,5 +41,38 @@ namespace FMB.Core.APITests.Controllers
             CommentsContext.Remove(createdComment);
             CommentsContext.SaveChanges();
         }
+
+
+        [TestMethod()]
+        public void GetCommentsTest()
+        {
+            var testPostId = PostsController.CreatePost(new Data.Models.Posts.CreatePostRequest { Title = "test", Body = "test" }).Result.Value;
+
+            var comment1_0 = CommentsController.CreateComment(new CreateCommentRequest
+            {
+                Body = "comment1",
+                Id = testPostId
+            }).Result;
+            var comment1_1 = CommentsController.CreateComment(new CreateCommentRequest
+            {
+                Body = "comment1",
+                Id = testPostId,
+                ParentCommentId = comment1_0.Value
+            }).Result;
+            var comment1_2 = CommentsController.CreateComment(new CreateCommentRequest
+            {
+                Body = "comment1",
+                Id = testPostId,
+                ParentCommentId = comment1_1.Value
+            }).Result;
+
+            var getCommentsResponse = CommentsController.GetCommentsByPostId(testPostId).Result;
+
+            Assert.IsTrue(getCommentsResponse.Any(x => x.Id == comment1_0.Value));
+            Assert.IsTrue(getCommentsResponse.Any(x => x.Id == comment1_1.Value));
+            Assert.IsTrue(getCommentsResponse.Any(x => x.Id == comment1_2.Value));
+            Assert.IsTrue(getCommentsResponse.Any(x => x.ParentCommentId == comment1_0.Value));
+            Assert.IsTrue(getCommentsResponse.Any(x => x.ParentCommentId == comment1_1.Value));
+        }
     }
 }

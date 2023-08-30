@@ -1,10 +1,12 @@
 ﻿using FMB.Services.Marks.Models;
+using FMB.Core.Data.Models.Marks;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FMB.Core.Data.Models.Enums;
 
 namespace FMB.Services.Marks
 {
@@ -36,20 +38,28 @@ namespace FMB.Services.Marks
             await _context.SaveChangesAsync();
         }
 
-        public async Task<Tuple<int, int>> GetPostRating(long postId)
+        public async Task<RatingDto> GetPostRating(long postId)
         {
             var allVotes = await _context.PostMarks.Where(x => x.PostId == postId).ToListAsync();
-            return new Tuple<int, int>(
-                allVotes.Count(x => x.Mark == MarkEnum.Upvote), 
-                allVotes.Count(x => x.Mark == MarkEnum.Downvote));
+            return new RatingDto()
+            {
+                EntityId = postId,
+                Type = RateableEntityType.Post,
+                UpVotes = allVotes.Count(x => x.Mark == MarkEnum.UpVote),
+                DownVotes = allVotes.Count(x => x.Mark == MarkEnum.DownVote)
+            };
         }
 
-        public async Task<Tuple<int, int>> GetCommentRating(long commentId)
+        public async Task<RatingDto> GetCommentRating(long commentId)
         {
             var allVotes = await _context.CommentMarks.Where(x => x.CommentId == commentId).ToListAsync();
-            return new Tuple<int, int>(
-                allVotes.Count(x => x.Mark == MarkEnum.Upvote), 
-                allVotes.Count(x => x.Mark == MarkEnum.Downvote));
+            return new RatingDto()
+            {
+                EntityId = commentId,
+                Type = RateableEntityType.Comment,
+                UpVotes = allVotes.Count(x => x.Mark == MarkEnum.UpVote),
+                DownVotes = allVotes.Count(x => x.Mark == MarkEnum.DownVote)
+            };
         }
 
         public async Task RateComment(long commentId, MarkEnum newMark, long userId)
@@ -70,6 +80,23 @@ namespace FMB.Services.Marks
             }
 
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<List<RatingDto>> GetCommentsRating(List<long> commentIds)
+        {
+            var allVotes = await _context.CommentMarks.Where(x => commentIds.Contains(x.CommentId)).ToListAsync();
+            var result = new List<RatingDto>();
+            foreach (var commentId in commentIds)
+            {
+                result.Add(new RatingDto
+                {
+                    EntityId = commentId,
+                    Type = RateableEntityType.Comment,
+                    UpVotes = allVotes.Where(x => x.CommentId == commentId).Count(x => x.Mark == MarkEnum.UpVote),
+                    DownVotes = allVotes.Where(x => x.CommentId == commentId).Count(x => x.Mark == MarkEnum.DownVote)
+                });
+            }
+            return result;
         }
     }
 }

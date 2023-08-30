@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Threading.Tasks;
 using FMB.Services.Comments.Models;
@@ -65,10 +66,14 @@ namespace FMB.Services.Comments
             await _context.SaveChangesAsync();
         }
 
-        public Task<bool> IsCommentExists(long commentId, long postId)
-            => _context.Comments.AnyAsync(x => x.PostId == postId && x.Id == commentId);
+        public async Task<bool> IsCommentExists(long commentId, long postId)
+            => await _context.Comments.AnyAsync(x => x.PostId == postId && x.Id == commentId);
 
-        public Task<bool> IsCommentExists(long commentId)
-            => _context.Comments.AnyAsync(x => x.Id == commentId);
+        public async Task<bool> IsCommentExists(long commentId)
+            => await _context.Comments.AnyAsync(x => x.Id == commentId);
+
+        public async Task<bool> IsCommentsExists(params long[] commentIds)
+            => (await _context.Comments.Where(x => commentIds.Contains(x.Id)).CountAsync()) == commentIds.Length;
+        
     }
 }

@@ -35,6 +35,10 @@ namespace FMB.Core.APITests.Controllers
             Assert.IsFalse(PostsContext.Posts.Any(x => x.Id == createPostResult.Value));
         }
 
+        [TestMethod()]
+        public void GetPostForFeed()
+        {
 
+        }
     }
 }

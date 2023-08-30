@@ -4,6 +4,7 @@ using FMB.Core.API.Models;
 using FMB.Core.Data.Data;
 using FMB.Core.Data.Models.Comments;
 using FMB.Services.Comments;
+using FMB.Services.Comments.Models;
 using FMB.Services.Posts;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -50,12 +51,11 @@ namespace FMB.Core.API.Controllers
             }
         }
 
+
         [HttpGet]
-        public async Task<IActionResult> GetCommentsByPostId(long postId)
+        public async Task<IEnumerable<Comment>> GetCommentsByPostId(long postId)
         {
-            var comments = await _commentsService.GetCommentsByPostId(postId);
-            return Ok(comments);
-        }
+            return await _commentsService.GetCommentsByPostId(postId);        }
 
         [HttpGet] 
         public async Task<IActionResult> GetCommentById([FromBody] GetCommentRequest request)

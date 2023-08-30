@@ -11,7 +11,7 @@ namespace FMB.Core.Data.Models.Comments
     {
         public long CommentId { get; set; }
         public DateTime CreatedAt { get; set; }
-        public GetRatingResponse Rating { get; set; }
+        public RatingDto Rating { get; set; }
         public string Body { get; set; }
         public IReadOnlyCollection<CommentDto> ChildComments { get; set; }
         public long AuthorId { get; set; }

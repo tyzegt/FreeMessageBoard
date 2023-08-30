@@ -40,19 +40,19 @@ namespace FMB.Core.API.Controllers.Marks
                 return BadRequest(new ErrorView("PostNotFound"));
             }
 
-            await _marksService.RatePost(request.Id, request.Upvote ? MarkEnum.Upvote : MarkEnum.Downvote, CurrentUser.Id);
+            await _marksService.RatePost(request.Id, request.Upvote ? MarkEnum.UpVote : MarkEnum.DownVote, CurrentUser.Id);
             return Ok();
         }
 
         [HttpGet]
-        public async Task<ActionResult<GetRatingResponse>> GetPostRating(long postId)
+        public async Task<ActionResult<RatingDto>> GetPostRating(long postId)
         {
             if (!await _postsService.IsPostExists(postId))
             {
                 return BadRequest(new ErrorView("PostNotFound"));
             }
 
-            return GetRatingResponse.MapFrom(await _marksService.GetPostRating(postId));
+            return await _marksService.GetPostRating(postId);
         }
 
         [HttpPost]
@@ -63,19 +63,30 @@ namespace FMB.Core.API.Controllers.Marks
                 return BadRequest(new ErrorView("CommentNotFound"));
             }
 
-            await _marksService.RateComment(request.Id, request.Upvote ? MarkEnum.Upvote : MarkEnum.Downvote, CurrentUser.Id);
+            await _marksService.RateComment(request.Id, request.Upvote ? MarkEnum.UpVote : MarkEnum.DownVote, CurrentUser.Id);
             return Ok();
         }
 
         [HttpGet]
-        public async Task<ActionResult<GetRatingResponse>> GetCommentRating(long commentId)
+        public async Task<ActionResult<RatingDto>> GetCommentRating(long commentId)
         {
             if (!await _commentsService.IsCommentExists(commentId))
             {
                 return BadRequest(new ErrorView("CommentNotFound"));
             }
 
-            return GetRatingResponse.MapFrom(await _marksService.GetCommentRating(commentId));
+            return await _marksService.GetCommentRating(commentId);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<List<RatingDto>>> GetCommentsRating(List<long> commentIds)
+        {
+            if (!await _commentsService.IsCommentsExists(commentIds.ToArray()))
+            {
+                return BadRequest(new ErrorView("CommentNotFound"));
+            }
+
+            return await _marksService.GetCommentsRating(commentIds);
         }
     }
 }
