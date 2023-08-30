@@ -1,0 +1,1 @@
+export { useTechMetaStore } from './model'
