@@ -14,7 +14,7 @@ namespace FMB.Services.Posts
         {
             _context = context;
         }
-        public async Task<long> CreatePostAsync(string title, string body, long userId) 
+        public async Task<long> CreatePost(string title, string body, long userId) 
         {
             if(string.IsNullOrEmpty(title)) { throw new ArgumentNullException(nameof(title)); }
             if(string.IsNullOrEmpty(body)) { throw new ArgumentNullException(nameof(body)); }
@@ -32,7 +32,7 @@ namespace FMB.Services.Posts
             return post.Id;
         }
 
-        public async Task DeletePostAsync(long postId)
+        public async Task DeletePost(long postId)
         {
             var targetPost = await _context.Posts.FirstOrDefaultAsync(p => p.Id == postId);
             if (targetPost == null) throw new Exception($"post {postId} not found");
@@ -42,7 +42,7 @@ namespace FMB.Services.Posts
             
         }
 
-        public async Task<Post> GetPostAsync(long postId)
+        public async Task<Post> GetPost(long postId)
         {
             var targetPost = await _context.Posts
                 .FirstOrDefaultAsync(p => p.Id == postId);
@@ -51,7 +51,7 @@ namespace FMB.Services.Posts
         }
  
 
-        public async Task UpdatePostAsync(long postId, string newPostBody, string? newPostTitle)
+        public async Task UpdatePost(long postId, string newPostBody, string? newPostTitle)
         {
             if(string.IsNullOrEmpty(newPostBody)) { throw new ArgumentNullException(nameof(newPostBody)); }
             if(string.IsNullOrEmpty(newPostTitle)) { throw new ArgumentNullException(nameof(newPostTitle)); }
